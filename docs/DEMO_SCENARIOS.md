@@ -7,6 +7,61 @@ Deterministic demo flows for verifying Holmes adaptive storefront behaviour.
 1. Ensure Aurora API is running (`pnpm dev` in aurora-studio) and Aurora has provisioned products.
 2. Run the ecom storefront: `pnpm dev` (port 3001).
 3. Open `/demo` for scenario cards with direct links.
+4. Open `/simulate` for side-by-side Holmes OFF vs ON with scripted user flows.
+
+---
+
+## Simulate Page
+
+The `/simulate` page runs two iframes side-by-side:
+
+- **Left** — Holmes OFF (`?holmes_disabled=1`) — no personalization
+- **Right** — Holmes ON — adaptive UX driven by Holmes mission inference
+
+A simulation engine runs the same user actions in both frames in parallel (typing, clicking, scrolling, navigation) so you can compare behaviour.
+
+### How It Works
+
+1. **Layout** — The layout uses `ConditionalHolmesScript`, which loads the Holmes script only when `holmes_disabled` is not in the URL. The left iframe loads pages with `holmes_disabled=1`, so Holmes never initialises there. The right iframe loads pages with `holmes_demo` (and optional context params), so Holmes runs in demo mode.
+
+2. **Simulation steps** — Each scenario has a sequence of steps:
+   - `goto` — Navigate to a path (e.g. `/catalogue`, `/checkout`)
+   - `wait` — Pause for a configurable duration
+   - `click` — Click an element (by selector, optionally filtered by text)
+   - `type` — Type into an input (e.g. search)
+   - `scroll` — Scroll within a container
+
+3. **Context overrides** — When Holmes runs in demo mode, you can override signals via URL params so Holmes sees different context:
+   - `holmes_time` — `morning` | `afternoon` | `evening`
+   - `holmes_season` — `spring` | `summer` | `autumn` | `winter`
+   - `holmes_day` — `weekday` | `weekend`
+   - `holmes_device` — `mobile` | `tablet` | `desktop`
+   - `holmes_referrer` — `direct` | `google` | `social` | `internal`
+
+   These are passed into the right iframe and read by the Holmes script (aurora-studio). Use "Auto" in the UI to use real values.
+
+### Controls
+
+| Control | Description |
+|---------|-------------|
+| **Scenario** | Predefined flow (Browsing, Urgent, Discovery, Ready to Pay, Routine Shop) |
+| **Speed** | Playback speed (0.25×–2×) |
+| **Holmes init** | Wait after catalogue load for Holmes to infer (1.5–6 s) |
+| **Typing** | Delay between keystrokes (20–150 ms) |
+| **Step pause** | Delay between steps (100–800 ms) |
+| **Context** | Time, Season, Day, Device, Referrer (or Auto) |
+
+### Scenarios
+
+| Scenario | Flow |
+|----------|------|
+| **Browsing** | Browse product → add to cart → browse more → add again → cart → basket bundle → checkout |
+| **Urgent** | Product → add to cart → checkout (fast path) |
+| **Discovery** | Focus search → type "milk" → browse result → add to cart |
+| **Ready to Pay** | Add 2 items → checkout (payment focus) |
+| **Routine Shop** | Scroll catalogue → product → add to cart → catalogue |
+
+---
 
 ## Demo Parameter
 

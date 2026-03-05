@@ -47,6 +47,7 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
 | **Product Detail** | Tabs, You May Also Like (Holmes recommendations when enabled) |
 | **Basket & Checkout** | Multi-step checkout, delivery slots, ACME test payment |
 | **Holmes** | AI mission inference, bundle banner, home page personalization |
+| **Simulate** | Side-by-side Holmes OFF vs ON with scripted user flows and context controls |
 | **Offers** | Store-specific offers (from offers table) or on-sale products |
 | **Account** | Profile, Orders, Addresses (Supabase Auth for full features) |
 
@@ -89,6 +90,8 @@ Data Builder → Import from JSON → use `init/schema-v2.json` (enterprise) or 
 ### 4. Holmes (Personalization)
 
 Holmes is loaded via a script in the layout. Enable Holmes in your tenant's commerce config.
+
+**Simulate page** — `/simulate` lets you compare Holmes OFF vs Holmes ON side-by-side. It runs scripted user flows (typing, clicking, scrolling) in both iframes so you can see how Holmes adapts the experience. See [docs/DEMO_SCENARIOS.md](docs/DEMO_SCENARIOS.md#simulate-page) for details.
 
 **What Holmes does:**
 - Captures behavioural signals (search, product views, cart)

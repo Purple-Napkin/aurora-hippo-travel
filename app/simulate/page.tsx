@@ -278,8 +278,9 @@ export default function SimulatePage() {
       const rightFrame = rightRef.current;
 
       if (step.type === "goto") {
-        const leftUrl = `${BASE}${step.path}?holmes_disabled=1`;
-        const rightUrl = `${BASE}${step.path}?${holmesQuery}`;
+        const sim = Date.now();
+        const leftUrl = `${BASE}${step.path}?holmes_disabled=1&_sim=${sim}`;
+        const rightUrl = `${BASE}${step.path}?${holmesQuery}&_sim=${sim}`;
         if (leftFrame) {
           leftFrame.dataset.simulatePanel = "left";
           leftFrame.src = leftUrl;
@@ -320,8 +321,9 @@ export default function SimulatePage() {
       setStepIndex(-1);
       const left = leftRef.current;
       const right = rightRef.current;
-      if (left) left.src = `${BASE}/catalogue?holmes_disabled=1`;
-      if (right) right.src = `${BASE}/catalogue?${holmesQuery}`;
+      const sim = Date.now();
+      if (left) left.src = `${BASE}/catalogue?holmes_disabled=1&_sim=${sim}`;
+      if (right) right.src = `${BASE}/catalogue?${holmesQuery}&_sim=${sim}`;
     }
     runStep(stepIndex < 0 ? 0 : stepIndex + 1);
   }, [playing, stepIndex, runStep, simulationSteps.length, holmesQuery]);
@@ -329,8 +331,9 @@ export default function SimulatePage() {
   const handleReset = useCallback(() => {
     setPlaying(false);
     setStepIndex(-1);
-    if (leftRef.current) leftRef.current.src = `${BASE}/catalogue?holmes_disabled=1`;
-    if (rightRef.current) rightRef.current.src = `${BASE}/catalogue?${holmesQuery}`;
+    const sim = Date.now();
+    if (leftRef.current) leftRef.current.src = `${BASE}/catalogue?holmes_disabled=1&_sim=${sim}`;
+    if (rightRef.current) rightRef.current.src = `${BASE}/catalogue?${holmesQuery}&_sim=${sim}`;
   }, [holmesQuery]);
 
   return (
@@ -538,16 +541,22 @@ export default function SimulatePage() {
         </div>
       </div>
 
-      {stepIndex >= 0 && (
-        <footer className="px-4 py-2 bg-slate-800/50 border-t border-slate-700 text-xs text-slate-400">
-          Step {stepIndex + 1} of {simulationSteps.length}:{" "}
-          {simulationSteps[stepIndex]?.type === "goto"
-            ? `Navigate to ${(simulationSteps[stepIndex] as { path: string }).path}`
-            : simulationSteps[stepIndex]?.type === "wait"
-              ? `Wait ${(simulationSteps[stepIndex] as { ms: number }).ms}ms`
-              : simulationSteps[stepIndex]?.type}
-        </footer>
-      )}
+      <footer className="px-4 py-2 bg-slate-800/50 border-t border-slate-700 text-xs text-slate-400">
+        {stepIndex >= 0 ? (
+          <>
+            Step {stepIndex + 1} of {simulationSteps.length}:{" "}
+            {simulationSteps[stepIndex]?.type === "goto"
+              ? `Navigate to ${(simulationSteps[stepIndex] as { path: string }).path}`
+              : simulationSteps[stepIndex]?.type === "wait"
+                ? `Wait ${(simulationSteps[stepIndex] as { ms: number }).ms}ms`
+                : simulationSteps[stepIndex]?.type}
+          </>
+        ) : (
+          <span className="text-slate-500">
+            {playing ? "Starting…" : "Click Play to run the simulation"}
+          </span>
+        )}
+      </footer>
     </div>
   );
 }
