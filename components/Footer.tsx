@@ -26,28 +26,28 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-3">Shop</h3>
             <ul className="space-y-2 text-sm text-aurora-muted">
-              <li><Link href="/catalogue?category=bakery-items" className="hover:text-white">Bakery Items</Link></li>
-              <li><Link href="/catalogue?category=frozen-foods" className="hover:text-white">Frozen Foods</Link></li>
-              <li><Link href="/catalogue?category=vegetables" className="hover:text-white">Vegetables</Link></li>
-              <li><Link href="/catalogue?category=fruits" className="hover:text-white">Fruits</Link></li>
-              <li><Link href="/catalogue?category=dairy-products" className="hover:text-white">Dairy Products</Link></li>
-              <li><Link href="/catalogue?category=snacks" className="hover:text-white">Snacks</Link></li>
-              <li><Link href="/catalogue?category=beverages" className="hover:text-white">Beverages</Link></li>
+              <li><Link href="/catalogue?category=bakery-items" className="hover:text-aurora-text transition-colors">Bakery Items</Link></li>
+              <li><Link href="/catalogue?category=frozen-foods" className="hover:text-aurora-text transition-colors">Frozen Foods</Link></li>
+              <li><Link href="/catalogue?category=vegetables" className="hover:text-aurora-text transition-colors">Vegetables</Link></li>
+              <li><Link href="/catalogue?category=fruits" className="hover:text-aurora-text transition-colors">Fruits</Link></li>
+              <li><Link href="/catalogue?category=dairy-products" className="hover:text-aurora-text transition-colors">Dairy Products</Link></li>
+              <li><Link href="/catalogue?category=snacks" className="hover:text-aurora-text transition-colors">Snacks</Link></li>
+              <li><Link href="/catalogue?category=beverages" className="hover:text-aurora-text transition-colors">Beverages</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="font-semibold mb-3">Account</h3>
             <ul className="space-y-2 text-sm text-aurora-muted">
-              <li><Link href="/account" className="hover:text-white">My Account</Link></li>
-              <li><Link href="/account/orders" className="hover:text-white">Orders</Link></li>
-              <li><Link href="/account/addresses" className="hover:text-white">Addresses</Link></li>
+              <li><Link href="/account" className="hover:text-aurora-text transition-colors">My Account</Link></li>
+              <li><Link href="/account/orders" className="hover:text-aurora-text transition-colors">Orders</Link></li>
+              <li><Link href="/account/addresses" className="hover:text-aurora-text transition-colors">Addresses</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="font-semibold mb-3">Company</h3>
             <ul className="space-y-2 text-sm text-aurora-muted">
-              <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-              <li><Link href="/about" className="hover:text-white">Privacy Policy</Link></li>
+              <li><Link href="/about" className="hover:text-aurora-text transition-colors">About Us</Link></li>
+              <li><Link href="/about" className="hover:text-aurora-text transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>

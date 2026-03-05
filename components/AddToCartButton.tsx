@@ -53,7 +53,7 @@ export function AddToCartButton({
             min="0.1"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
-            className="w-20 px-2 py-2 rounded-component border border-aurora-border bg-aurora-bg text-white"
+            className="w-20 px-2 py-2 rounded-lg border border-aurora-border bg-aurora-surface text-aurora-text"
           />
           <span className="text-aurora-muted">{unit}</span>
         </div>
@@ -62,7 +62,7 @@ export function AddToCartButton({
           onClick={handleAdd}
           className={
             className ??
-            "px-4 py-2 rounded-component bg-aurora-accent text-aurora-bg font-medium hover:opacity-90 transition-opacity"
+            "px-4 py-2 rounded-lg bg-aurora-primary text-white font-semibold hover:bg-aurora-primary-dark transition-colors"
           }
         >
           Add to cart
@@ -77,7 +77,7 @@ export function AddToCartButton({
       onClick={() => addItem({ recordId, tableSlug, name, unitAmount, imageUrl })}
       className={
         className ??
-        "px-4 py-2 rounded-component bg-aurora-accent text-aurora-bg font-medium hover:opacity-90 transition-opacity"
+        "px-4 py-2 rounded-lg bg-aurora-primary text-white font-semibold hover:bg-aurora-primary-dark transition-colors"
       }
     >
       Add to cart

@@ -21,7 +21,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const theme = process.env.NEXT_PUBLIC_THEME === "light" ? "light" : "dark";
+  const theme = process.env.NEXT_PUBLIC_THEME === "dark" ? "dark" : "light";
   return (
     <html lang="en" data-theme={theme}>
       <body
@@ -29,7 +29,7 @@ export default function RootLayout({
         style={
           {
             "--aurora-accent":
-              process.env.NEXT_PUBLIC_ACCENT_COLOR ?? "#38bdf8",
+              process.env.NEXT_PUBLIC_ACCENT_COLOR ?? "#15803D",
             color: "var(--aurora-text)",
           } as React.CSSProperties
         }

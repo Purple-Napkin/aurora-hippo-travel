@@ -53,9 +53,14 @@ function CatalogueContent() {
   const [currency, setCurrency] = useState("GBP");
   const [page, setPage] = useState(0);
   const [categories, setCategories] = useState<CategoryItem[]>(DEFAULT_CATEGORIES);
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
   const [suggestedSlugs, setSuggestedSlugs] = useState<string[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const limit = 24;
+
+  const categoriesWithProducts = categories.filter(
+    (cat) => categoryCounts[cat.slug] === undefined || categoryCounts[cat.slug] > 0
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -139,6 +144,34 @@ function CatalogueContent() {
 
   useEffect(() => {
     let cancelled = false;
+    if (!categories.length || !store?.id) return;
+    (async () => {
+      const counts: Record<string, number> = {};
+      await Promise.all(
+        categories.map(async (cat) => {
+          try {
+            const res = await search({
+              q: "",
+              limit: 1,
+              offset: 0,
+              vendorId: store?.id,
+              category: cat.slug,
+            });
+            if (!cancelled) counts[cat.slug] = res.total ?? 0;
+          } catch {
+            if (!cancelled) counts[cat.slug] = 0;
+          }
+        })
+      );
+      if (!cancelled) setCategoryCounts((prev) => ({ ...prev, ...counts }));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [categories, store?.id]);
+
+  useEffect(() => {
+    let cancelled = false;
     const fetchSuggested = () => {
       const sid = typeof window !== "undefined" && (window as { holmes?: { getSessionId?: () => string } }).holmes?.getSessionId?.();
       if (!sid || cancelled) return;
@@ -167,7 +200,7 @@ function CatalogueContent() {
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar filters (desktop) */}
         <CatalogueFilters
-          categories={categories}
+          categories={categoriesWithProducts}
           currentCategory={category}
           currentSort={tab}
           onSortChange={handleSortChange}
@@ -181,7 +214,7 @@ function CatalogueContent() {
           <button
             type="button"
             onClick={() => setFiltersOpen((o) => !o)}
-            className="flex items-center gap-2 px-4 py-2 rounded-component bg-aurora-surface/80 border border-aurora-border hover:border-aurora-accent/40 text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 text-sm font-medium"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -194,14 +227,14 @@ function CatalogueContent() {
         </div>
 
         {/* Main content */}
-        <main className="flex-1 min-w-0 sm:min-w-[280px]">
+        <main className="flex-1 min-w-0 w-full sm:min-w-[280px]">
           <h1 className="font-display text-xl sm:text-2xl font-bold mb-4">Products</h1>
 
           {/* Mobile filter drawer */}
           {filtersOpen && (
-            <div className="lg:hidden mb-6 rounded-component border border-aurora-border overflow-hidden">
+            <div className="lg:hidden mb-6 rounded-lg border border-aurora-border overflow-hidden">
               <CatalogueFilters
-                categories={categories}
+                categories={categoriesWithProducts}
                 currentCategory={category}
                 currentSort={tab}
                 onSortChange={handleSortChange}
@@ -214,14 +247,14 @@ function CatalogueContent() {
           )}
 
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 w-full">
               {Array.from({ length: 12 }).map((_, i) => (
                 <ProductCardSkeleton key={i} />
               ))}
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 w-full">
                 {hits.map((record) => {
                   const id = (record.recordId ?? record.id) as string;
                   const name = getDisplayName(record);
@@ -240,10 +273,10 @@ function CatalogueContent() {
                   return (
                     <div
                       key={id}
-                      className="group p-4 rounded-2xl bg-aurora-surface/60 border border-aurora-border/80 hover:border-aurora-accent/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                      className="group p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
                     >
                       <Link href={`/catalogue/${id}`} className="block">
-                        <div className="aspect-square rounded-component bg-aurora-surface-hover mb-3 overflow-hidden">
+                        <div className="aspect-square rounded-lg bg-aurora-surface-hover mb-3 overflow-hidden">
                           {imageUrl ? (
                             <img
                               src={imageUrl}
@@ -256,11 +289,11 @@ function CatalogueContent() {
                             </div>
                           )}
                         </div>
-                        <p className="font-display font-semibold text-sm sm:text-base truncate group-hover:text-aurora-accent transition-colors">
+                        <p className="font-semibold text-sm sm:text-base truncate group-hover:text-aurora-primary transition-colors">
                           {name}
                         </p>
                         {(priceCents != null || (sellByWeight && pricePerUnit != null)) && (
-                          <p className="text-sm mt-1 font-bold text-aurora-accent">
+                          <p className="text-sm mt-1 font-bold text-aurora-primary">
                             {sellByWeight && pricePerUnit != null
                               ? formatPrice(Math.round(pricePerUnit * 100), currency) + `/${unit}`
                               : formatPrice(priceCents!, currency)}
@@ -285,7 +318,7 @@ function CatalogueContent() {
                 })}
               </div>
               {hits.length === 0 && (
-                <p className="text-center text-aurora-muted py-12">
+                <p className="text-center text-aurora-muted py-12 w-full">
                   {category
                     ? "No products in this category yet. Try another category or add products in Aurora Studio."
                     : !store
@@ -299,7 +332,7 @@ function CatalogueContent() {
                     type="button"
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     disabled={page === 0}
-                    className="px-4 py-2 rounded-component border border-aurora-border disabled:opacity-50"
+                    className="px-4 py-2 rounded-lg border border-aurora-border disabled:opacity-50 hover:bg-aurora-surface-hover transition-colors"
                   >
                     Previous
                   </button>
@@ -310,7 +343,7 @@ function CatalogueContent() {
                     type="button"
                     onClick={() => setPage((p) => p + 1)}
                     disabled={(page + 1) * limit >= total}
-                    className="px-4 py-2 rounded-component border border-aurora-border disabled:opacity-50"
+                    className="px-4 py-2 rounded-lg border border-aurora-border disabled:opacity-50 hover:bg-aurora-surface-hover transition-colors"
                   >
                     Next
                   </button>

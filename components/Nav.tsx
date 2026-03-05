@@ -16,13 +16,13 @@ export function Nav() {
   const locationDisplay = location?.address ?? store?.name ?? "Select location";
 
   return (
-    <nav className="sticky top-0 z-[100] border-b border-aurora-border bg-aurora-bg/95 backdrop-blur supports-[backdrop-filter]:bg-aurora-bg/80">
+    <nav className="sticky top-0 z-[100] border-b border-aurora-border bg-aurora-surface shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between gap-4 h-14">
           <div className="flex items-center gap-6 shrink-0">
             <Link
               href="/"
-              className="flex items-center gap-3 rounded-component p-1 -m-1 ring-2 ring-transparent hover:ring-aurora-accent/30 focus:ring-aurora-accent/50 focus:outline-none transition-all"
+              className="flex items-center gap-3 rounded-component p-1 -m-1 ring-2 ring-transparent hover:ring-aurora-primary/30 focus:ring-aurora-primary/50 focus:outline-none transition-all"
               aria-label={`${siteName} home`}
             >
               {logoUrl ? (
@@ -38,25 +38,25 @@ export function Nav() {
             <div className="hidden sm:flex items-center gap-6">
               <Link
                 href="/"
-                className="text-sm text-aurora-muted hover:text-white transition-colors"
+                className="text-sm text-aurora-muted hover:text-aurora-text transition-colors font-medium"
               >
                 Home
               </Link>
               <Link
                 href="/offers"
-                className="text-sm text-aurora-muted hover:text-white transition-colors"
+                className="text-sm text-aurora-muted hover:text-aurora-text transition-colors font-medium"
               >
                 Offers
               </Link>
               <Link
                 href="/about"
-                className="text-sm text-aurora-muted hover:text-white transition-colors"
+                className="text-sm text-aurora-muted hover:text-aurora-text transition-colors font-medium"
               >
                 About
               </Link>
               <Link
                 href="/demo"
-                className="text-sm text-aurora-accent/90 hover:text-aurora-accent font-medium transition-colors"
+                className="text-sm text-aurora-primary hover:text-aurora-primary-dark font-semibold transition-colors"
               >
                 Demo
               </Link>
@@ -84,7 +84,7 @@ export function Nav() {
           <div className="flex items-center gap-3 shrink-0">
             <Link
               href={store ? "/stores" : "/location"}
-              className="flex items-center gap-2 text-sm text-aurora-muted hover:text-white transition-colors min-w-0 max-w-[140px]"
+              className="flex items-center gap-2 text-sm text-aurora-muted hover:text-aurora-text transition-colors min-w-0 max-w-[140px]"
               title={locationDisplay}
             >
               <MapPin className="w-4 h-4 shrink-0" />
@@ -93,7 +93,7 @@ export function Nav() {
             <CartLink />
             <Link
               href="/account"
-              className="flex items-center gap-2 text-aurora-muted hover:text-white p-2 rounded-component hover:bg-aurora-surface min-w-0"
+              className="flex items-center gap-2 text-aurora-muted hover:text-aurora-text p-2 rounded-component hover:bg-aurora-surface-hover min-w-0"
               aria-label="Account"
               title={user ? user.email ?? "Account" : "Sign in"}
             >

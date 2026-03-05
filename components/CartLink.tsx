@@ -10,11 +10,11 @@ export function CartLink() {
   return (
     <Link
       href="/cart"
-      className="flex items-center gap-2 text-sm text-aurora-muted hover:text-white transition-colors"
+      className="flex items-center gap-2 text-sm text-aurora-muted hover:text-aurora-text transition-colors font-medium"
     >
       <span>Cart</span>
       {count > 0 && (
-        <span className="px-2 py-0.5 rounded-full bg-aurora-accent text-aurora-bg text-xs font-medium">
+        <span className="px-2 py-0.5 rounded-full bg-aurora-primary text-white text-xs font-semibold">
           {count}
         </span>
       )}

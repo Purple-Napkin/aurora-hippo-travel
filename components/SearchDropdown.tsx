@@ -76,7 +76,7 @@ export function SearchDropdown({
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query && setOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-10 pr-4 py-2 rounded-component bg-aurora-surface border border-aurora-border text-white placeholder:text-aurora-muted focus:outline-none focus:ring-2 focus:ring-aurora-accent/50"
+          className="w-full pl-10 pr-4 py-2 rounded-lg bg-aurora-surface border border-aurora-border text-aurora-text placeholder:text-aurora-muted focus:outline-none focus:ring-2 focus:ring-aurora-primary/50"
           aria-label="Search products"
         />
       </div>
@@ -111,7 +111,7 @@ export function SearchDropdown({
                         {hit.name ?? hit.title ?? hit.snippet ?? hit.recordId}
                       </p>
                       {hit.price != null && Number(hit.price) > 0 && (
-                        <p className="text-sm text-aurora-accent">
+                        <p className="text-sm text-aurora-primary font-semibold">
                           {formatPrice(toCents(hit.price) ?? 0)}
                         </p>
                       )}

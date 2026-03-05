@@ -40,7 +40,7 @@ export async function CategoryNav() {
             <Link
               key={cat.slug}
               href={`/catalogue?category=${encodeURIComponent(cat.slug)}`}
-              className="shrink-0 px-4 py-2.5 rounded-full bg-aurora-surface/70 border border-aurora-border/70 hover:bg-aurora-surface hover:border-aurora-accent/50 hover:text-aurora-accent text-sm font-medium transition-all duration-200 whitespace-nowrap shadow-sm"
+              className="shrink-0 px-4 py-2.5 rounded-full bg-aurora-surface border border-aurora-border hover:border-aurora-primary hover:text-aurora-primary text-sm font-medium transition-all duration-200 whitespace-nowrap shadow-sm"
             >
               {cat.name}
             </Link>

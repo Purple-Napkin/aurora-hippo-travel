@@ -98,19 +98,19 @@ export async function SpecialOffers() {
 
           return (
             <Link key={id} href="/offers" className="block">
-              <div className="p-4 rounded-component bg-aurora-surface/80 border border-aurora-border hover:border-aurora-accent/40 transition-all">
+              <div className="p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 shadow-sm transition-all">
                 <div className="aspect-square rounded-component bg-aurora-surface-hover mb-3 flex items-center justify-center text-aurora-muted text-3xl">
                   —
                 </div>
                 <p className="font-semibold text-sm truncate">{name}</p>
                 {label && (
-                  <span className="inline-block px-2 py-0.5 rounded bg-aurora-accent/20 text-aurora-accent text-xs font-medium mt-1">
+                  <span className="inline-block px-2 py-0.5 rounded bg-aurora-primary/15 text-aurora-primary text-xs font-medium mt-1">
                     {label}
                   </span>
                 )}
                 {desc && <p className="text-xs text-aurora-muted mt-1 line-clamp-2">{desc}</p>}
                 {priceCents != null && (
-                  <p className="text-sm mt-1 font-bold text-aurora-accent">
+                  <p className="text-sm mt-1 font-bold text-aurora-primary">
                     {formatPrice(priceCents, currency)}
                   </p>
                 )}
@@ -133,7 +133,7 @@ export async function SpecialOffers() {
         return (
           <div
             key={id}
-            className="p-4 rounded-component bg-aurora-surface/80 border border-aurora-border hover:border-aurora-accent/40 transition-all"
+            className="p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 shadow-sm transition-all"
           >
             <Link href={`/catalogue/${id}`} className="block">
               <div className="aspect-square rounded-component bg-aurora-surface-hover mb-3 overflow-hidden">

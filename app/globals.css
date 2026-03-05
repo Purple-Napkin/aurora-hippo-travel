@@ -1,34 +1,32 @@
 @import "leaflet/dist/leaflet.css";
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 
-/* Theme: dark (default) vs light via NEXT_PUBLIC_THEME=light */
+/* Supermarket style guide: light default, professional grocery aesthetic */
 :root,
-[data-theme="dark"] {
-  --aurora-bg: #050810;
-  --aurora-surface: rgba(30, 41, 59, 0.7);
-  --aurora-surface-hover: rgba(51, 65, 85, 0.7);
-  --aurora-border: rgba(148, 163, 184, 0.12);
-  --aurora-muted: rgba(248, 250, 252, 0.65);
-  --aurora-text: #f1f5f9;
-  --font-display: "Syne", system-ui, sans-serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
-}
-
 [data-theme="light"] {
-  --aurora-bg: #f8fafc;
-  --aurora-surface: rgba(255, 255, 255, 0.9);
-  --aurora-surface-hover: rgba(226, 232, 240, 0.9);
-  --aurora-border: rgba(30, 41, 59, 0.2);
-  --aurora-muted: rgba(30, 41, 59, 0.7);
-  --aurora-text: #0f172a;
+  --aurora-bg: #F8FAF5;
+  --aurora-surface: #FFFFFF;
+  --aurora-surface-hover: #F1F5E8;
+  --aurora-border: #E5E7EB;
+  --aurora-muted: #64748B;
+  --aurora-text: #1C1917;
+  --aurora-primary: #15803D;
+  --aurora-primary-dark: #166534;
+  --aurora-accent: #15803D;
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
-/* Light theme: text-white should show dark text for contrast */
-[data-theme="light"] .text-white {
-  color: var(--aurora-text) !important;
-}
-[data-theme="light"] .hover\:text-white:hover {
-  color: var(--aurora-text) !important;
+[data-theme="dark"] {
+  --aurora-bg: #0a0f0a;
+  --aurora-surface: rgba(30, 50, 30, 0.9);
+  --aurora-surface-hover: rgba(45, 80, 45, 0.8);
+  --aurora-border: rgba(148, 163, 148, 0.2);
+  --aurora-muted: rgba(248, 250, 248, 0.65);
+  --aurora-text: #f1f5f1;
+  --aurora-primary: #4ade80;
+  --aurora-primary-dark: #22c55e;
+  --aurora-accent: #4ade80;
 }
 
 /* Fallback pin icon: no border/background so inline SVG is the only visible part */

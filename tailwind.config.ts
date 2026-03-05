@@ -13,13 +13,15 @@ const config: Config = {
       },
       colors: {
         aurora: {
-          bg: "var(--aurora-bg, #0a0e17)",
-          surface: "var(--aurora-surface, rgba(30, 41, 59, 0.6))",
-          "surface-hover": "var(--aurora-surface-hover, rgba(51, 65, 85, 0.6))",
-          border: "var(--aurora-border, rgba(148, 163, 184, 0.15))",
-          accent: "var(--aurora-accent, #38bdf8)",
-          muted: "var(--aurora-muted, rgba(248, 250, 252, 0.7))",
-          text: "var(--aurora-text, #f8fafc)",
+          bg: "var(--aurora-bg, #F8FAF5)",
+          surface: "var(--aurora-surface, #FFFFFF)",
+          "surface-hover": "var(--aurora-surface-hover, #F1F5E8)",
+          border: "var(--aurora-border, #E5E7EB)",
+          accent: "var(--aurora-accent, #15803D)",
+          primary: "var(--aurora-primary, #15803D)",
+          "primary-dark": "var(--aurora-primary-dark, #166534)",
+          muted: "var(--aurora-muted, #64748B)",
+          text: "var(--aurora-text, #1C1917)",
         },
       },
       borderRadius: {
