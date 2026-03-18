@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { AddToCartButton } from "@/components/AddToCartButton";
 import { useStore } from "@/components/StoreContext";
-import { search, createAuroraClient } from "@/lib/aurora";
+import { search, getStoreConfig } from "@/lib/aurora";
 import type { SearchHit } from "@/lib/aurora";
 
 function getImageUrl(record: Record<string, unknown>): string | null {
@@ -73,9 +73,8 @@ function CatalogueContent() {
     let cancelled = false;
     (async () => {
       try {
-        const aurora = createAuroraClient();
-        const config = await aurora.store.config();
-        if (config.enabled && config.catalogTableSlug) {
+        const config = await getStoreConfig();
+        if (config?.enabled && config.catalogTableSlug) {
           if (!cancelled) {
             setCatalogSlug(config.catalogTableSlug);
             setCurrency((config as { currency?: string }).currency ?? "GBP");
