@@ -1,6 +1,6 @@
-# Aurora E-commerce Starter Template
+# Aurora E-commerce Showcase Template
 
-A full-featured retail storefront for Aurora Studio. Showcases Aurora capabilities: Meilisearch search, Holmes mission inference, home page personalization, delivery slots, per-store offers, and multi-step checkout.
+A full-featured retail storefront for Aurora Studio. Showcases Aurora capabilities: Meilisearch search, Holmes mission inference, delivery slots, per-store promotions, and multi-step checkout.
 
 **Theme:** Dark mode by default. Set `NEXT_PUBLIC_THEME=light` for a light theme.
 
@@ -8,7 +8,9 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
 
 ## Quick Start
 
-1. **Clone and install:**
+1. **Create or clone:**
+   - **Option A — From Studio:** Sign up at [Aurora](https://aurora.mandeville.digital), create a workspace from the "Hippo Ecom" template (`free-ecom`). Studio provisions the base schema; the storefront adds the full schema on first run.
+   - **Option B — Clone:**
    ```bash
    git clone https://github.com/marceldupr/aurora-starter-ecom.git
    cd aurora-starter-ecom
@@ -21,7 +23,7 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
    ```
    Edit `.env.local` with your Aurora API URL, API key, and tenant slug (from Aurora Studio → Settings).
 
-3. **Provision schema** (first time only):
+3. **Provision schema** (first time only, if not provisioned via Studio):
    ```bash
    AURORA_API_URL=https://api.yourapp.com AURORA_API_KEY=aur_xxx pnpm schema:provision
    ```
@@ -39,154 +41,74 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
 
 ## Features
 
-| Feature | Description |
-|---------|-------------|
-| **Location & Store Selection** | Set delivery location on a map, browse nearby stores |
-| **Meilisearch Search** | Live product search dropdown in header |
-| **Product Catalogue** | Sidebar filters, Featured/Bestsellers/New/On Sale tabs |
-| **Product Detail** | Tabs, You May Also Like (Holmes recommendations when enabled) |
-| **Basket & Checkout** | Multi-step checkout, delivery slots, ACME test payment |
-| **Holmes** | AI mission inference, bundle banner, home page personalization |
-| **Simulate** | Side-by-side Holmes OFF vs ON with scripted user flows and context controls |
-| **Offers** | Store-specific offers (from offers table) or on-sale products |
-| **Account** | Profile, Orders, Addresses (Supabase Auth for full features) |
+- **Location & Store Selection** — Set delivery location on a map, browse nearby stores
+- **Meilisearch Search** — Live product search dropdown in header
+- **Product Catalogue** — Featured, Bestsellers, New Arrivals, On Sale tabs; category filters
+- **Product Detail** — Tabs (Details, Nutrition, Feedback), You May Also Like
+- **Basket & Checkout** — Multi-step checkout with delivery slot selection; ACME test payment flow (`/checkout/acme`, `/checkout/success`)
+- **Holmes** — AI mission inference; one-click bundle checkout when enabled
+- **Promotions** — Store-specific offers and on-sale products
+- **Account** — Profile, Orders, Addresses (integrate Supabase Auth for full features)
 
----
+## Setup
 
-## Full Setup Instructions
+1. Copy `.env.example` to `.env.local`
+2. Configure environment variables (see below)
+3. Provision your Aurora tenant with the base schema (see Schema)
+4. Run `pnpm dev`
 
-### 1. Environment Variables
+## Environment Variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `NEXT_PUBLIC_AURORA_API_URL` | Yes | Aurora API base (e.g. `https://api.yourapp.com`) |
+| `NEXT_PUBLIC_AURORA_API_URL` | Yes | Aurora API base URL (e.g. `https://api.yourapp.com`) |
 | `AURORA_API_KEY` | Yes | API key from Aurora Studio → Settings → API Keys |
-| `NEXT_PUBLIC_TENANT_SLUG` | Yes | Tenant slug (e.g. `acme`) |
+| `NEXT_PUBLIC_TENANT_SLUG` | Yes | Your tenant slug (e.g. `acme`) |
 | `NEXT_PUBLIC_SITE_NAME` | No | Store name (default: "Store") |
 | `NEXT_PUBLIC_LOGO_URL` | No | Logo image URL |
 | `NEXT_PUBLIC_ACCENT_COLOR` | No | Accent colour (default: `#38bdf8`) |
-| `NEXT_PUBLIC_THEME` | No | `dark` or `light` (default: `dark`) |
-| `NEXT_PUBLIC_APP_URL` | No | Full storefront URL for checkout redirects (e.g. `https://shop.yourapp.com`) |
 
-### 2. Schema Provisioning
+## Base Schema
 
-The template requires: vendors, categories, products, offers (or products with on_sale), orders, order_items, product_substitutions, addresses, hero_banners, home_sections, curated_collections.
+Provision the required tables before using the template:
 
-**Option A — Provision script:**
+**Option A — Import in Aurora Studio**  
+Data Builder → Import from JSON → use `schema/base-store-schema-import.json`
+
+**Option B — Provision script** (requires tenant admin API key)
 ```bash
-AURORA_API_URL=https://api.yourapp.com AURORA_API_KEY=aur_xxx pnpm schema:provision
+AURORA_API_URL=https://api.yourapp.com AURORA_API_KEY=aur_xxx TENANT_SLUG=your-tenant pnpm schema:provision
 ```
+If you get 401/403, use Option A instead.
 
-**Option B — Import in Aurora Studio:**  
-Data Builder → Import from JSON → use `init/schema-v2.json` (enterprise) or `init/schema.json`
+**Tables created:** vendors, categories, products, promotions, orders, order_items, product_substitutions, addresses
 
-### 3. Meilisearch (Search)
+For **Meilisearch** search to work, enable Meilisearch in Aurora Settings and run an index sync for your products table.
 
-1. Aurora Studio → Settings → Search
-2. Configure Meilisearch URL and master key
-3. Select your tenant and products table
-4. Run "Clear & Sync" to index products
+For **delivery slots**, add vendors with `location` (PostGIS), create `vendor_catchments` and `delivery_slots` records. Vendors manage slots in the vendor dashboard.
 
-### 4. Holmes (Personalization)
+## Holmes
 
-Holmes is loaded via a script in the layout. Enable Holmes in your tenant's commerce config.
+Holmes is auto-injected when `NEXT_PUBLIC_AURORA_API_URL` and `NEXT_PUBLIC_TENANT_SLUG` are set. It captures behavioural signals and surfaces a mission-based product bundle when confidence is high. Enable Holmes in your tenant commerce config.
 
-**Simulate page** — `/simulate` lets you compare Holmes OFF vs Holmes ON side-by-side. It runs scripted user flows (typing, clicking, scrolling) in both iframes so you can see how Holmes adapts the experience. See [docs/DEMO_SCENARIOS.md](docs/DEMO_SCENARIOS.md#simulate-page) for details.
+For standalone deployment, set `NEXT_PUBLIC_APP_URL` on the Aurora API to your storefront URL so Holmes redirects correctly after one-click checkout.
 
-**What Holmes does:**
-- Captures behavioural signals (search, product views, cart)
-- Inferences shopper mission (e.g. quick meal, bulk shop)
-- Injects a **bundle banner** when confidence is high
-- **Personalizes the home page** (hero + Meals / Top up / Inspiration sections) when `home-personalization` API is configured
-- Replaces "You May Also Like" with mission-driven recommendations on product pages
+## ACME Checkout
 
-**Event wiring** (already in this template): `lib/holmes-events.ts` dispatches `holmes:search`, `holmes:productView`, `holmes:cartUpdate`. The Holmes script listens and updates signals.
+When Stripe is not configured, the template uses **ACME** — a test payment provider. Checkout flow:
 
-### 5. Delivery Slots
+1. Create session via `/store/checkout/sessions` → returns ACME session URL
+2. User completes payment at `/checkout/acme?session=acme_xxx`
+3. Redirect to `/checkout/success` or custom success URL
 
-1. Add vendors with `location` (PostGIS point)
-2. Create `vendor_catchments` and `delivery_slots` records
-3. Vendors manage slots in the vendor dashboard
-
-### 6. ACME Checkout (Test Payment)
-
-When Stripe is not configured, checkout uses **ACME** — a test provider. Flow:
-
-1. Create session → redirect to `/checkout/acme?session=acme_xxx`
-2. Complete payment → redirect to `/checkout/success`
-
-Set `NEXT_PUBLIC_APP_URL` for correct redirects in production.
-
----
-
-## Holmes Home Personalization
-
-The home page includes placeholders that the Holmes script fills when personalization is enabled:
-
-- **`data-holmes="home-hero"`** — Hero banner (title, subtitle, image, CTAs). Falls back to static `HeroBanner` if no API response.
-- **`data-holmes="home-sections"`** — Meals for tonight, Top up on essentials, Inspiration for you. Populated from `home-personalization` API (time of day, holidays, mission).
-
-Requires Aurora Studio with `home-personalization` endpoint and `home_sections` / `curated_collections` tables. See Aurora Studio migrations.
-
-### Time-of-Day & Holiday Promotions
-
-The `home-personalization` API combines:
-
-1. **Holidays** (public table, shared) — Add rows in `public.holidays`:
-
-   | Column     | Example         |
-   |------------|-----------------|
-   | key        | `valentines`    |
-   | name       | Valentine's Day |
-   | start_date | 2025-02-14      |
-   | end_date   | 2025-02-14      |
-   | region     | GB              |
-
-   A migration seeds common GB holidays (Valentine's, Easter, Mother's Day, Christmas, etc.). Add more via SQL or a future admin UI.
-
-2. **Home sections** — In your tenant's `home_sections` table, configure sections with optional filters:
-   - `time_of_day`: `morning` | `afternoon` | `evening`
-   - `day_of_week`: `mon`–`sun`
-   - `holiday_key`: matches `public.holidays.key` (only shown when that holiday is active)
-
-   Sections without filters show for all visitors. Sections with filters show only when conditions match.
-
-3. **CMS overrides** — If you have rows in `hero_banners` or `home_sections`, they take precedence. Holmes falls back to default sections (Meals, Top up, Inspiration) when CMS content is empty.
-
-4. **Pexels images** — Set `PEXELS_API_KEY` in Aurora Studio `.env` to fetch stock imagery for hero and sections when CMS rows have no `image_url`. Get a free key at [pexels.com/api](https://www.pexels.com/api/).
-
----
-
-## Catalogue Filters
-
-The catalogue page uses a **sidebar layout** on desktop with:
-
-- **Categories** — From your category table (or defaults)
-- **Sort options** — Featured, Bestsellers, New Arrivals, On Sale
-
-On mobile, filters open in a bottom drawer.
-
----
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start dev server (provisions schema if env vars set) |
-| `pnpm build` | Production build |
-| `pnpm start` | Run production server |
-| `pnpm lint` | Run ESLint |
-| `pnpm typecheck` | TypeScript check |
-| `pnpm schema:provision` | Provision schema to Aurora tenant |
-
----
+The API redirects to `/checkout/acme` when the success path starts with `/checkout`. Configure `NEXT_PUBLIC_APP_URL` for correct redirects in standalone deployment.
 
 ## Deploy to Vercel
 
-From Aurora Studio: Settings → Storefront → Deploy to Vercel. Environment variables are injected automatically.
+From Aurora Studio: Settings → Storefront → Deploy to Vercel. Uses template `free-ecom` from the Template Registry. Environment variables are injected automatically.
 
 ---
 
 ## SDK Version
 
-This template uses `@aurora-studio/sdk@0.2.9`. Holmes features (offers, chat, home personalization) are available in SDK 0.2.7+.
+This template uses `@aurora-studio/sdk@0.2.12`. Holmes features (offers, chat, home personalization, session attribution, time-to-completion metrics) are available in SDK 0.2.7+.

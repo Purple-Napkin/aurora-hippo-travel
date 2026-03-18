@@ -15,6 +15,7 @@ declare global {
       setCartCount: (n: number) => void;
       setCartItems: (items: Array<{ id: string; name: string; price: number }>) => void;
       getSessionId?: () => string;
+      getMissionStartTimestamp?: () => number | null;
       addBundleToCart?: (
         products: Array<{ id: string; name: string; price: number; image?: string }>,
         tableSlug: string

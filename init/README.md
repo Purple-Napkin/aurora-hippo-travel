@@ -2,6 +2,8 @@
 
 This folder holds everything that runs **once** when your app starts, so the Aurora tenant has the right schema without manual setup.
 
+**Template ID:** `free-ecom` (registered in Aurora Studio Template Registry). When deploying via Studio → Deploy to Vercel, the tenant may already be provisioned from onboarding; schema provision is idempotent and adds any missing tables.
+
 ## What’s here
 
 | File | Purpose |
@@ -13,8 +15,13 @@ This folder holds everything that runs **once** when your app starts, so the Aur
 
 ## When it runs
 
-- **On server start:** Next.js runs root `instrumentation.ts` → `init/register.ts` → `runFirstRunProvision()`. Skips if env vars are missing or the tenant already has tables.
+- **On server start:** Next.js runs root `instrumentation.ts` → `init/register.ts` → `runFirstRunProvision()`. Skips if env vars are missing. Provision is idempotent—only adds missing tables.
 - **Manually:** `pnpm schema:provision` (see `scripts/provision-schema.mjs`) reads `init/schema-v2.json` (or `schema.json`) and calls the same API.
+
+## Provision flows
+
+1. **Studio onboarding** — User creates workspace from "Hippo Ecom" template. Studio calls `POST /api/tenants/:slug/provision` with `templateId: "free-ecom"`.
+2. **Storefront first run** — This init runs `provisionSchema` via `register.ts` or `schema:provision`. Adds full schema; idempotent with Studio-provisioned tables.
 
 ## Env vars
 

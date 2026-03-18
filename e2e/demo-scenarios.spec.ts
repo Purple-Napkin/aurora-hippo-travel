@@ -76,6 +76,48 @@ test.describe("Holmes Demo Scenarios", () => {
     await expect(recommendations).not.toHaveClass(/holmes-hidden/);
   });
 
+  test("predictive flow: prefetched checkout-summary snap-in on cart navigation", async ({
+    page,
+  }) => {
+    // Flow: catalogue → add to cart → product page (triggers prefetch) → cart (snap-in)
+    await page.goto("/catalogue?holmes_demo=routine_shop");
+
+    try {
+      await page.waitForSelector("body[data-holmes-active='true']", { timeout: HOLMES_APPLY_MS });
+    } catch {
+      test.skip(true, "Holmes script not active (API key may be invalid)");
+      return;
+    }
+
+    const addToCartBtn = page.getByRole("button", { name: /add to cart/i }).first();
+    if ((await addToCartBtn.count()) === 0) {
+      test.skip(true, "No products in catalog");
+      return;
+    }
+
+    await addToCartBtn.click();
+
+    // Navigate to product detail to trigger cart-related prefetch
+    const productLink = page.locator('a[href^="/catalogue/"]').first();
+    if ((await productLink.count()) === 0) {
+      test.skip(true, "No product links");
+      return;
+    }
+    await productLink.click();
+
+    // Wait for infer + prefetch (conf >= 0.5 → prefetch checkout-summary/basket-bundle)
+    await page.waitForTimeout(8_000);
+
+    await page.goto("/cart");
+
+    const checkoutSummary = page.locator("[data-holmes=checkout-summary]");
+    await expect(checkoutSummary).toBeVisible({ timeout: 5_000 });
+    // Prefetched fragment should have content (link or CTA)
+    await expect(checkoutSummary.locator("a[href='/checkout'], [data-holmes-checkout-summary-link]")).toBeVisible({
+      timeout: 5_000,
+    });
+  });
+
   test("holmes_demo persists in sessionStorage across navigation", async ({ page }) => {
     await page.goto("/catalogue?holmes_demo=urgent_replenishment");
     try {

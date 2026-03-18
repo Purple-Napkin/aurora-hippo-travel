@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
 import { useCart } from "@/components/CartProvider";
 import { useStore } from "@/components/StoreContext";
-import type { DeliverySlot } from "@/lib/aurora";
+import {
+  createCheckoutSession,
+  getDeliverySlots,
+  type DeliverySlot,
+} from "@/lib/aurora";
 
 function formatPrice(cents: number): string {
   return new Intl.NumberFormat("en-GB", {
@@ -17,7 +20,6 @@ function formatPrice(cents: number): string {
 
 const SHIPPING_CENTS = 250;
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const SLOT_STORAGE_KEY = "aurora-checkout-selected-slot";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -25,10 +27,7 @@ export default function CheckoutPage() {
   const { location, store } = useStore();
   const [step, setStep] = useState(1);
   const [slots, setSlots] = useState<DeliverySlot[]>([]);
-  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    return sessionStorage.getItem(SLOT_STORAGE_KEY);
-  });
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -41,9 +40,8 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (location) {
-      fetch(`/api/delivery-slots?lat=${location.lat}&lng=${location.lng}`)
-        .then((r) => r.json())
-        .then((data) => setSlots(data.data ?? []))
+      getDeliverySlots(location.lat, location.lng)
+        .then((r) => setSlots(r.data ?? []))
         .catch(() => setSlots([]));
     } else {
       setSlots([]);
@@ -58,6 +56,11 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const holmes_session_id =
+        typeof window !== "undefined" ? window.holmes?.getSessionId?.() : undefined;
+      const holmes_mission_start_timestamp =
+        typeof window !== "undefined" ? window.holmes?.getMissionStartTimestamp?.() : undefined;
+
       const res = await fetch("/api/checkout/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,16 +79,23 @@ export default function CheckoutPage() {
             },
           })),
           deliverySlotId: selectedSlotId ?? undefined,
+          ...(holmes_session_id && { holmes_session_id }),
+          ...(holmes_mission_start_timestamp != null && {
+            holmes_mission_start_timestamp: holmes_mission_start_timestamp,
+          }),
         }),
       });
       if (!res.ok) {
-        const err = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(err.error ?? "Checkout failed");
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as { error?: string }).error ?? "Checkout failed");
       }
       const data = (await res.json()) as { url?: string };
-      clearCart();
-      if (data.url) window.location.href = data.url;
-      else throw new Error("No checkout URL returned");
+      if (data.url) {
+        clearCart();
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
     } catch (e) {
       alert(e instanceof Error ? e.message : "Checkout failed");
     } finally {
@@ -110,10 +120,7 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6">
       {store && (
-        <div
-          className="flex items-center justify-between mb-6"
-          data-holmes="checkout-extras"
-        >
+        <div className="flex items-center justify-between mb-6">
           <span className="text-aurora-muted">Checkout from: {store.name}</span>
           <Link href="/stores" className="text-aurora-accent hover:underline text-sm">
             Change Store
@@ -154,8 +161,7 @@ export default function CheckoutPage() {
                 {location && (
                   <div className="p-4 rounded-component bg-aurora-surface border border-aurora-border mb-4">
                     <p className="text-sm flex items-center gap-2">
-                      <MapPin className="w-4 h-4 shrink-0" />
-                      {location.address ?? `Lat: ${location.lat}, Lng: ${location.lng}`}
+                      <span>📍</span> {location.address ?? `Lat: ${location.lat}, Lng: ${location.lng}`}
                     </p>
                     <p className="text-aurora-muted text-xs mt-1">
                       Move the map to position the pin at your delivery location.
@@ -167,7 +173,7 @@ export default function CheckoutPage() {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Or enter address manually"
-                  className="w-full px-4 py-3 rounded-component bg-aurora-surface border border-aurora-border text-aurora-text placeholder:text-aurora-muted"
+                  className="w-full px-4 py-3 rounded-component bg-aurora-surface border border-aurora-border text-white"
                 />
               </div>
               <div>
@@ -215,23 +221,20 @@ export default function CheckoutPage() {
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   placeholder="We'll only contact you about your delivery"
-                  className="w-full px-4 py-3 rounded-component bg-aurora-surface border border-aurora-border text-aurora-text placeholder:text-aurora-muted"
+                  className="w-full px-4 py-3 rounded-component bg-aurora-surface border border-aurora-border text-white"
                 />
               </div>
-              <div data-holmes="checkout-extras">
+              <div>
                 <label className="block font-medium mb-2">Delivery instructions (optional)</label>
                 <textarea
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
                   placeholder="e.g. Leave with neighbor, place at back door"
                   rows={3}
-                  className="w-full px-4 py-3 rounded-component bg-aurora-surface border border-aurora-border text-aurora-text placeholder:text-aurora-muted"
+                  className="w-full px-4 py-3 rounded-component bg-aurora-surface border border-aurora-border text-white"
                 />
               </div>
-              <label
-                className="flex items-center gap-3 cursor-pointer"
-                data-holmes="checkout-extras"
-              >
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={allowSubstitutions}
@@ -255,10 +258,7 @@ export default function CheckoutPage() {
           )}
 
           {step === 3 && (
-            <div
-              className="p-4 rounded-component bg-aurora-surface border border-aurora-border"
-              data-holmes="payment"
-            >
+            <div className="p-4 rounded-component bg-aurora-surface border border-aurora-border">
               <p className="text-aurora-muted">
                 You will be redirected to complete payment securely.
               </p>
@@ -293,12 +293,12 @@ export default function CheckoutPage() {
                 <span>{formatPrice(grandTotal)}</span>
               </div>
             </div>
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-2 mt-4">
               {step > 1 && (
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
-                  className="flex-1 py-3.5 px-5 rounded-component border border-aurora-border bg-aurora-surface text-aurora-text font-medium hover:bg-aurora-surface-hover hover:border-aurora-muted transition-colors"
+                  className="flex-1 py-3 rounded-component border border-aurora-border"
                 >
                   Back
                 </button>
@@ -307,7 +307,7 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setStep(step + 1)}
-                  className="flex-1 py-3.5 px-5 rounded-component bg-aurora-accent text-aurora-bg font-semibold hover:opacity-95 transition-opacity"
+                  className="flex-1 py-3 rounded-component bg-aurora-accent text-aurora-bg font-bold"
                 >
                   {step === 2 ? "Proceed to Payment" : "Continue"}
                 </button>
@@ -316,7 +316,7 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={handlePayment}
                   disabled={loading}
-                  className="flex-1 py-3.5 px-5 rounded-component bg-aurora-accent text-aurora-bg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-95 transition-opacity"
+                  className="flex-1 py-3 rounded-component bg-aurora-accent text-aurora-bg font-bold disabled:opacity-50"
                 >
                   {loading ? "Processing…" : "Place Order & Pay"}
                 </button>

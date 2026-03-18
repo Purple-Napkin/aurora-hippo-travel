@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCart } from "./CartProvider";
+import { getApiBase, getTenantSlug } from "@/lib/aurora";
 
 export function CheckoutButton() {
   const { items, total, clearCart } = useCart();
@@ -10,6 +11,15 @@ export function CheckoutButton() {
   const handleCheckout = async () => {
     if (items.length === 0) return;
     setLoading(true);
+
+    const apiBase = getApiBase();
+    const tenantSlug = getTenantSlug();
+
+    if (!apiBase || !tenantSlug) {
+      alert("API not configured. Set NEXT_PUBLIC_AURORA_API_URL and NEXT_PUBLIC_TENANT_SLUG.");
+      setLoading(false);
+      return;
+    }
 
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     const successUrl = `${origin}/checkout/success`;
@@ -28,6 +38,8 @@ export function CheckoutButton() {
 
     const holmes_session_id =
       typeof window !== "undefined" ? window.holmes?.getSessionId?.() : undefined;
+    const holmes_mission_start_timestamp =
+      typeof window !== "undefined" ? window.holmes?.getMissionStartTimestamp?.() : undefined;
 
     try {
       const res = await fetch("/api/checkout/sessions", {
@@ -38,6 +50,9 @@ export function CheckoutButton() {
           cancelUrl,
           lineItems,
           ...(holmes_session_id && { holmes_session_id }),
+          ...(holmes_mission_start_timestamp != null && {
+            holmes_mission_start_timestamp,
+          }),
         }),
       });
 
