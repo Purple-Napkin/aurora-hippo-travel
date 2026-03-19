@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { RecipeMissionHero } from "./RecipeMissionHero";
 import { RecipeIngredientsSection } from "./RecipeIngredientsSection";
 import { getStoreConfig } from "@/lib/aurora";
 export type QuickAction = { label: string; href: string };
@@ -73,16 +72,8 @@ export function MissionAwareHomeProvider({
   );
 }
 
-/** Hero area: RecipeMissionHero when in recipe mission, else default hero (server component). */
+/** Hero area: always logo+form layout. When recipe mission, Holmes content replaces only the logo slot (left). */
 export function MissionAwareHero({ children }: { children: React.ReactNode }) {
-  const data = useMissionAware();
-  if (data?.mode === "recipe_mission" && data.recipeSlug && data.recipeTitle) {
-    return (
-      <div data-holmes="home-hero">
-        <RecipeMissionHero recipeTitle={data.recipeTitle} recipeSlug={data.recipeSlug} />
-      </div>
-    );
-  }
   return <div data-holmes="home-hero">{children}</div>;
 }
 

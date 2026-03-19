@@ -6,6 +6,7 @@ import { ProductImage } from "./ProductImage";
 import { ChefHat } from "lucide-react";
 import { getTimeOfDay } from "@/lib/utils";
 import { useStore } from "./StoreContext";
+import { RecipeProductCollage } from "./RecipeProductCollage";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   gbp: "£",
@@ -43,6 +44,14 @@ function getTrustSignal(section: Section, timeOfDay: string, storeName?: string)
   }
 }
 
+type RecipeWithProducts = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  productImageUrls?: string[];
+};
+
 /** Single adaptive feed - listens for Holmes data, renders with trust signals */
 export function AdaptiveFeed({
   children,
@@ -50,7 +59,7 @@ export function AdaptiveFeed({
   currency = "gbp",
 }: {
   children: React.ReactNode;
-  recipes: Array<{ id: string; slug: string; title: string; description: string | null }>;
+  recipes: RecipeWithProducts[];
   currency?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -108,8 +117,11 @@ export function AdaptiveFeed({
                       href={`/recipes/${encodeURIComponent(r.slug)}`}
                       className="block p-3 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 transition-all"
                     >
-                      <div className="aspect-square rounded-lg bg-aurora-surface-hover mb-2 flex items-center justify-center">
-                        <ChefHat className="w-10 h-10 text-aurora-primary/60" />
+                      <div className="aspect-square rounded-lg mb-2 overflow-hidden">
+                        <RecipeProductCollage
+                          imageUrls={r.productImageUrls ?? []}
+                          className="w-full h-full"
+                        />
                       </div>
                       <p className="font-semibold text-sm truncate">{r.title}</p>
                     </Link>
@@ -120,17 +132,39 @@ export function AdaptiveFeed({
           }
 
           if (sec.type === "inspiration") {
+            if (!sec.cards?.length) return null;
             return (
-              <section key={i} className="space-y-2">
-                <h2 className="text-lg font-bold text-aurora-text">{sec.title}</h2>
-                {sec.subtitle && (
-                  <p className="text-sm text-aurora-muted">{sec.subtitle}</p>
-                )}
-                {sec.cards?.length && (
-                  <p className="text-aurora-text text-sm">
-                    {sec.cards.map((c) => c.title).join(" · ")}
-                  </p>
-                )}
+              <section key={i} className="space-y-3">
+                <div>
+                  <h2 className="text-lg font-bold text-aurora-text">{sec.title}</h2>
+                  {sec.subtitle && (
+                    <p className="text-sm text-aurora-muted mt-0.5">{sec.subtitle}</p>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {sec.cards.map((card, j) => (
+                    <Link
+                      key={j}
+                      href={card.linkUrl || "/catalogue"}
+                      className="block p-3 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 transition-all"
+                    >
+                      <div className="aspect-square rounded-lg bg-aurora-surface-hover mb-2 overflow-hidden">
+                        <ProductImage
+                          src={card.imageUrl}
+                          className="w-full h-full"
+                          objectFit="contain"
+                          thumbnail
+                          fallback={
+                            <span className="w-full h-full flex items-center justify-center text-aurora-muted text-sm text-center px-2">
+                              {card.title}
+                            </span>
+                          }
+                        />
+                      </div>
+                      <p className="font-semibold text-sm truncate">{card.title}</p>
+                    </Link>
+                  ))}
+                </div>
               </section>
             );
           }

@@ -49,6 +49,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes insight-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(31,169,113,0.45); }
+  50% { box-shadow: 0 0 20px rgba(31,169,113,0.65); }
+}
+.insight-icon-glow {
+  box-shadow: 0 0 12px rgba(31,169,113,0.45);
+  animation: insight-glow 2.5s ease-in-out infinite;
+}
+
 body {
   font-family: var(--font-body);
 }

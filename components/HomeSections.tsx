@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { getHomePersonalization, holmesRecentRecipes } from "@/lib/aurora";
+import { getHomePersonalization, holmesRecentRecipes, holmesRecipeProducts } from "@/lib/aurora";
 import { getStoreConfig } from "@/lib/aurora";
 import { ProductImage } from "@/components/ProductImage";
 import { ChefHat } from "lucide-react";
 import { AdaptiveFeed } from "./AdaptiveFeed";
+import { RecipeProductCollage } from "./RecipeProductCollage";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   gbp: "£",
@@ -25,19 +26,34 @@ export async function HomeSections() {
   const symbol = CURRENCY_SYMBOLS[currency] ?? "£";
   const recipes = recipesResult?.recipes ?? [];
 
+  // Fetch first 4 product images per recipe for collage (parallel)
+  const recipesWithProducts = await Promise.all(
+    recipes.slice(0, 4).map(async (r) => {
+      try {
+        const { products } = await holmesRecipeProducts(r.slug, 4);
+        const imageUrls = (products ?? [])
+          .map((p) => (p as { image_url?: string }).image_url)
+          .filter((u): u is string => !!u);
+        return { ...r, productImageUrls: imageUrls };
+      } catch {
+        return { ...r, productImageUrls: [] as string[] };
+      }
+    })
+  );
+
   if (!homeData?.sections?.length) {
     return (
-      <AdaptiveFeed recipes={recipes} currency={currency}>
+      <AdaptiveFeed recipes={recipesWithProducts} currency={currency}>
         <div className="min-h-[1px]" />
       </AdaptiveFeed>
     );
   }
 
   return (
-    <AdaptiveFeed recipes={recipes} currency={currency}>
+    <AdaptiveFeed recipes={recipesWithProducts} currency={currency}>
       {homeData.sections.map((sec, i) => {
         // "meals" type: show recipes instead of products
-        if (sec.type === "meals" && recipes.length > 0) {
+        if (sec.type === "meals" && recipesWithProducts.length > 0) {
           return (
             <section
               key={i}
@@ -52,7 +68,7 @@ export async function HomeSections() {
                 data-holmes-home-section-grid
                 className="grid grid-cols-2 sm:grid-cols-4 gap-4"
               >
-                {recipes.slice(0, 4).map((r) => (
+                {recipesWithProducts.map((r) => (
                   <Link
                     key={r.id}
                     href={`/recipes/${encodeURIComponent(r.slug)}`}
@@ -61,9 +77,12 @@ export async function HomeSections() {
                   >
                     <div
                       data-holmes-home-card-image
-                      className="aspect-square rounded-lg bg-aurora-surface-hover mb-2 overflow-hidden flex items-center justify-center"
+                      className="aspect-square rounded-lg mb-2 overflow-hidden"
                     >
-                      <ChefHat className="w-12 h-12 text-aurora-primary/60" aria-hidden />
+                      <RecipeProductCollage
+                        imageUrls={r.productImageUrls ?? []}
+                        className="w-full h-full"
+                      />
                     </div>
                     <div
                       data-holmes-home-card-title
@@ -83,7 +102,7 @@ export async function HomeSections() {
           );
         }
 
-        // "inspiration" type: render as copy, not carousel
+        // "inspiration" type: curated collections as card grid (image + title)
         if (sec.type === "inspiration") {
           return (
             <section
@@ -91,19 +110,53 @@ export async function HomeSections() {
               data-holmes-home-section
               className="mb-10 last:mb-0"
             >
-              <h2 data-holmes-home-section-title className="text-xl font-bold mb-3">
+              <h2 data-holmes-home-section-title className="text-xl font-bold mb-4 flex items-center gap-2">
                 {sec.title}
               </h2>
-              <div className="prose prose-sm max-w-none text-aurora-text">
-                {sec.subtitle && (
-                  <p className="text-aurora-muted mb-2">{sec.subtitle}</p>
-                )}
-                {sec.cards && sec.cards.length > 0 && (
-                  <p className="text-aurora-text">
-                    {sec.cards.map((c) => c.title).join(" · ")}
-                  </p>
-                )}
-              </div>
+              {sec.subtitle && (
+                <p className="text-aurora-muted text-sm mb-4">{sec.subtitle}</p>
+              )}
+              {sec.cards && sec.cards.length > 0 && (
+                <div
+                  data-holmes-home-section-grid
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+                >
+                  {sec.cards.map((card, j) => (
+                    <Link
+                      key={j}
+                      href={card.linkUrl || "/catalogue"}
+                      data-holmes-home-card
+                      className="block p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 hover:shadow-md transition-all"
+                    >
+                      <div
+                        data-holmes-home-card-image
+                        className="aspect-square rounded-lg bg-aurora-surface-hover mb-2 overflow-hidden"
+                      >
+                        <ProductImage
+                          src={card.imageUrl}
+                          className="w-full h-full"
+                          objectFit="contain"
+                          thumbnail
+                          fallback={
+                            <span
+                              data-holmes-home-card-fallback
+                              className="w-full h-full flex items-center justify-center text-aurora-muted text-sm text-center px-2"
+                            >
+                              {card.title}
+                            </span>
+                          }
+                        />
+                      </div>
+                      <div
+                        data-holmes-home-card-title
+                        className="font-semibold text-sm truncate"
+                      >
+                        {card.title}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </section>
           );
         }

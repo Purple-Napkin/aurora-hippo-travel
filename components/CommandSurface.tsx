@@ -6,6 +6,7 @@ import { SearchDropdown } from "./SearchDropdown";
 import { useStore } from "./StoreContext";
 import { useAuth } from "./AuthProvider";
 import { useMissionAware } from "./MissionAwareHome";
+import { RecipeMissionHero } from "./RecipeMissionHero";
 import { getTimeOfDay } from "@/lib/utils";
 
 const ICON_MAP: Record<string, typeof UtensilsCrossed> = {
@@ -50,8 +51,8 @@ function getDefaultQuickActions(timeOfDay: string) {
   return base;
 }
 
-/** Zero-state command surface with hero image - actionable intent capture + real retail warmth */
-export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null }) {
+/** Hero: logo left, shopping form right. Responsive, elegant. */
+export function CommandSurface({ logoUrl }: { logoUrl?: string | null }) {
   const { store } = useStore();
   const { user } = useAuth();
   const homeData = useMissionAware();
@@ -68,20 +69,32 @@ export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null 
 
   const quickActions = rawActions.filter((a) => !a.authOnly || user);
 
-  const content = (
-    <div className="relative z-10 max-w-2xl mx-auto">
-      <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-aurora-text text-center mb-3 drop-shadow-sm">
+  const isRecipeMission =
+    homeData?.mode === "recipe_mission" && homeData.recipeSlug && homeData.recipeTitle;
+
+  const formContent = (
+    <div className="relative z-10 w-full max-w-xl">
+      {isRecipeMission && (
+        <div className="mb-6">
+          <RecipeMissionHero
+            recipeTitle={homeData.recipeTitle!}
+            recipeSlug={homeData.recipeSlug!}
+            compact
+          />
+        </div>
+      )}
+      <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-aurora-text mb-3">
         What are you shopping for today?
       </h1>
-      <p className="text-aurora-muted/90 text-center text-base sm:text-lg mb-8 font-medium">
-        Let&apos;s get you there fast
+      <p className="text-aurora-muted text-base sm:text-lg mb-6 font-medium">
+        {isRecipeMission ? "Or something else?" : "Let's get you there fast"}
       </p>
 
-      {/* Command bar - search + intent (z-20 so dropdown appears above Quick starts) */}
-      <div className="relative z-20 mb-8">
+      {/* Command bar - search + intent */}
+      <div className="relative z-20 mb-6">
         {store ? (
           <div
-            className="rounded-2xl border border-white/60 bg-white/95 backdrop-blur-sm shadow-xl shadow-black/5 focus-within:border-aurora-primary/60 focus-within:ring-2 focus-within:ring-aurora-primary/20 transition-all"
+            className="rounded-2xl border border-aurora-border bg-aurora-surface shadow-sm focus-within:border-aurora-primary/60 focus-within:ring-2 focus-within:ring-aurora-primary/20 transition-all"
             data-command-search
           >
             <SearchDropdown
@@ -93,7 +106,7 @@ export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null 
         ) : (
           <Link
             href="/location"
-            className="flex items-center gap-3 w-full px-6 py-4 rounded-2xl border-2 border-dashed border-white/50 bg-white/80 backdrop-blur-sm text-aurora-muted hover:text-aurora-text hover:border-aurora-primary/40 transition-all"
+            className="flex items-center gap-3 w-full px-6 py-4 rounded-2xl border-2 border-dashed border-aurora-border bg-aurora-surface text-aurora-muted hover:text-aurora-text hover:border-aurora-primary/40 transition-all"
           >
             <Search className="w-5 h-5 shrink-0" />
             <span>Set location to search products</span>
@@ -101,19 +114,19 @@ export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null 
         )}
       </div>
 
-      {/* Quick starts - Holmes-influenced when inference exists, else time-of-day defaults */}
+      {/* Quick starts */}
       <div className="relative z-0">
-        <p className="text-xs font-semibold text-aurora-muted/90 uppercase tracking-widest mb-4">
+        <p className="text-xs font-semibold text-aurora-muted uppercase tracking-widest mb-3">
           Quick starts
         </p>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap gap-3">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link
                 key={action.label}
                 href={action.href}
-                className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/60 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-aurora-primary/10 hover:border-aurora-primary/40 hover:bg-white transition-all text-sm font-semibold text-aurora-text"
+                className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-aurora-surface border border-aurora-border shadow-sm hover:border-aurora-primary/40 hover:shadow-md transition-all text-sm font-semibold text-aurora-text"
               >
                 <Icon className="w-4 h-4 text-aurora-primary" />
                 {action.label}
@@ -123,7 +136,7 @@ export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null 
           {!quickActions.some((a) => a.label === "Recipe ideas") && (
             <Link
               href="/catalogue?q=recipe"
-              className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/60 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-aurora-primary/10 hover:border-aurora-primary/40 hover:bg-white transition-all text-sm font-semibold text-aurora-text"
+              className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-aurora-surface border border-aurora-border shadow-sm hover:border-aurora-primary/40 hover:shadow-md transition-all text-sm font-semibold text-aurora-text"
             >
               <Sparkles className="w-4 h-4 text-aurora-primary" />
               Recipe ideas
@@ -134,27 +147,37 @@ export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null 
     </div>
   );
 
-  if (heroImageUrl) {
-    return (
-      <section className="relative min-h-[420px] sm:min-h-[480px] py-16 sm:py-24 px-4 sm:px-6 flex flex-col justify-center">
-        {/* Hero image - full bleed, subtle scale for edge bleed (overflow-hidden clips scale only, not dropdown) */}
-        <div className="absolute inset-0 overflow-hidden" aria-hidden>
-          <div
-            className="absolute inset-0 bg-cover bg-center scale-105"
-            style={{ backgroundImage: `url(${heroImageUrl})` }}
-          />
-        </div>
-        {/* Overlay - softer than before, lets image breathe for premium feel */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/60 to-white/85 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-aurora-bg/40 via-transparent to-transparent pointer-events-none" />
-        {content}
-      </section>
-    );
-  }
-
   return (
-    <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gradient-to-b from-aurora-surface to-aurora-bg border-b border-aurora-border">
-      {content}
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-aurora-surface to-aurora-bg border-b border-aurora-border">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-12 xl:gap-16">
+        {/* Logo - always on left */}
+        <div className="flex-1 min-w-0 order-2 lg:order-1 flex justify-center lg:justify-start w-full lg:min-w-[280px]">
+          <Link
+            href="/"
+            className="block w-full max-w-[min(85vw,320px)] lg:max-w-full transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-aurora-primary/50 rounded-lg"
+            aria-label="Home"
+          >
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt=""
+                className="w-full h-auto object-contain drop-shadow-sm
+                  max-h-[clamp(7rem,40vw,12rem)] sm:max-h-[clamp(9rem,38vw,15rem)] md:max-h-[clamp(11rem,36vw,18rem)]
+                  lg:max-h-[clamp(14rem,55vh,24rem)] xl:max-h-[clamp(16rem,58vh,28rem)] 2xl:max-h-[clamp(18rem,60vh,32rem)]"
+              />
+            ) : (
+              <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-aurora-text">
+                {process.env.NEXT_PUBLIC_SITE_NAME ?? "Store"}
+              </span>
+            )}
+          </Link>
+        </div>
+
+        {/* Form - right on desktop */}
+        <div className="flex-1 min-w-0 order-1 lg:order-2 flex justify-center lg:justify-end w-full lg:min-w-[320px]">
+          {formContent}
+        </div>
+      </div>
     </section>
   );
 }
