@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { RecipeIngredientsSection } from "./RecipeIngredientsSection";
 import { getStoreConfig } from "@/lib/aurora";
 export type QuickAction = { label: string; href: string };
@@ -107,6 +108,13 @@ export function MissionAwareHomeProvider({
       document.removeEventListener("holmes:ready", onReady);
     };
   }, []);
+
+  const pathname = usePathname();
+  useEffect(() => {
+    if (pathname === "/cart" || pathname === "/checkout" || pathname?.startsWith("/checkout/")) {
+      fetchRef.current();
+    }
+  }, [pathname]);
 
   const value: MissionAwareContextValue =
     data ? { ...data, refresh } : (null as MissionAwareContextValue);
