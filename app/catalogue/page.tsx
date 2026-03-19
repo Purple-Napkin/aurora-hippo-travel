@@ -188,6 +188,8 @@ function CatalogueContent() {
     fetchSuggested();
     const onReady = () => { fetchSuggested(); };
     document.addEventListener("holmes:ready", onReady);
+    const onCartUpdate = () => { fetchSuggested(); };
+    document.addEventListener("holmes:cartUpdate", onCartUpdate);
     const pollInterval = setInterval(() => {
       const sid = (window as { holmes?: { getSessionId?: () => string } }).holmes?.getSessionId?.();
       if (sid) {
@@ -196,10 +198,13 @@ function CatalogueContent() {
       }
     }, 400);
     const timeout = setTimeout(() => clearInterval(pollInterval), 6000);
+    const refreshInterval = setInterval(fetchSuggested, 8000);
     return () => {
       cancelled = true;
       document.removeEventListener("holmes:ready", onReady);
+      document.removeEventListener("holmes:cartUpdate", onCartUpdate);
       clearInterval(pollInterval);
+      clearInterval(refreshInterval);
       clearTimeout(timeout);
     };
   }, []);
