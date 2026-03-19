@@ -87,6 +87,7 @@ export function CommandSurface({ heroImageUrl }: { heroImageUrl?: string | null 
             <SearchDropdown
               placeholder='e.g. "pasta dinner", "weekly shop", "quick snacks"'
               vendorId={store.id}
+              fullWidth
             />
           </div>
         ) : (

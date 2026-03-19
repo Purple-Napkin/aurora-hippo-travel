@@ -28,9 +28,12 @@ function saveRecent(terms: string[]) {
 export function SearchDropdown({
   vendorId,
   placeholder = "Search milk, bananas, pasta…",
+  fullWidth,
 }: {
   vendorId?: string;
   placeholder?: string;
+  /** When true, input fills container (e.g. for CommandSurface hero). */
+  fullWidth?: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [hits, setHits] = useState<SearchHit[]>([]);
@@ -122,7 +125,7 @@ export function SearchDropdown({
   const showRecipeSuggestion = open && query.trim().length >= 2 && recipeSuggestion && !loading;
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-[280px]">
+    <div ref={containerRef} className={`relative w-full ${fullWidth ? "" : "max-w-[280px]"}`}>
       <div className="relative">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-aurora-muted" />
         <input

@@ -20,7 +20,7 @@ function setHolmesDisabled(disabled: boolean): void {
   }
 }
 
-/** Development-only buttons: reset Holmes session, toggle Holmes on/off. */
+/** Holmes dev tools: reset session, toggle Holmes on/off. Shown in dev and production. */
 export function HolmesDevTools() {
   const { clearCart } = useCart();
   const [holmesDisabled, setHolmesDisabledState] = useState(false);
@@ -28,8 +28,6 @@ export function HolmesDevTools() {
   useEffect(() => {
     setHolmesDisabledState(isHolmesDisabled());
   }, []);
-
-  if (process.env.NODE_ENV !== "development") return null;
 
   const handleResetSession = () => {
     clearCart();

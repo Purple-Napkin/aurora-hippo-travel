@@ -45,12 +45,6 @@ export function Nav() {
                 Home
               </Link>
               <Link
-                href="/offers"
-                className="text-sm text-aurora-muted hover:text-aurora-text transition-colors font-medium"
-              >
-                Offers
-              </Link>
-              <Link
                 href="/about"
                 className="text-sm text-aurora-muted hover:text-aurora-text transition-colors font-medium"
               >
