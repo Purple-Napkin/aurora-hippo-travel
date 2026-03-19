@@ -154,7 +154,7 @@ export function SearchDropdown({
                             {hit.image_url ? (
                               <img src={hit.image_url} alt="" className="w-10 h-10 rounded-component object-cover shrink-0" />
                             ) : (
-                              <div className="w-10 h-10 rounded-component bg-aurora-surface-hover shrink-0 flex items-center justify-center text-aurora-muted">—</div>
+                              <div className="w-10 h-10 rounded-component bg-aurora-surface-hover shrink-0 flex items-center justify-center text-aurora-muted"> - </div>
                             )}
                             <div className="flex-1 min-w-0">
                               <p className="font-medium truncate">{hit.name ?? hit.title ?? hit.snippet ?? hit.recordId}</p>

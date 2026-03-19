@@ -1,5 +1,5 @@
 /**
- * Holmes event bridge — push storefront signals to the Holmes script.
+ * Holmes event bridge - push storefront signals to the Holmes script.
  * Works for any storefront: call directly or dispatch DOM events.
  * The Holmes script (loaded via layout) listens and sends data to Aurora.
  *

@@ -27,7 +27,7 @@ export async function runFirstRunProvision(): Promise<void> {
   const baseUrl = apiUrl.replace(/\/$/, "");
 
   // Idempotent: importSchemaForTenant merges (skips existing tables/fields).
-  // Runs even when Studio provisioned base tables—adds any delta (hero_banners, home_sections, etc.).
+  // Runs even when Studio provisioned base tables - adds any delta (hero_banners, home_sections, etc.).
   const schema = loadSchema();
   const result = await provisionSchema(baseUrl, apiKey, schema);
 

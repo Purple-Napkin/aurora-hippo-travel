@@ -62,7 +62,7 @@ export async function HeroBanner() {
           {subtitle}
         </p>
         <p className="text-aurora-muted text-sm max-w-xl mx-auto mb-8">
-          Browse vegetables, bakery, dairy, snacks & more — all from your favourite local stores.
+          Browse vegetables, bakery, dairy, snacks & more - all from your favourite local stores.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link

@@ -6,6 +6,7 @@ import {
   useCallback,
   useState,
   useEffect,
+  useRef,
   type ReactNode,
 } from "react";
 import { holmesCartUpdate } from "@/lib/holmes-events";
@@ -55,6 +56,10 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [mounted, setMounted] = useState(false);
+  const itemsRef = useRef<CartItem[]>(items);
+  const bootstrapFiredRef = useRef(false);
+
+  itemsRef.current = items;
 
   useEffect(() => {
     setItems(loadCart());
@@ -79,20 +84,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!mounted) return;
     const fireBootstrap = () => {
-      const count = items.reduce((s, i) => s + i.quantity, 0);
-      const holmesItems = items.map((i) => ({
+      if (bootstrapFiredRef.current) return;
+      bootstrapFiredRef.current = true;
+      const currentItems = itemsRef.current;
+      const count = currentItems.reduce((s, i) => s + i.quantity, 0);
+      const holmesItems = currentItems.map((i) => ({
         id: i.recordId,
         name: i.name,
         price: i.unitAmount,
       }));
       holmesCartUpdate(count, holmesItems, true);
     };
-    if ((window as { holmes?: { getSessionId?: () => string } }).holmes?.getSessionId) {
+    const onReady = () => fireBootstrap();
+    if ((window as { holmes?: { getSessionId?: () => string } }).holmes?.getSessionId && !bootstrapFiredRef.current) {
       fireBootstrap();
     }
-    document.addEventListener("holmes:ready", fireBootstrap);
-    return () => document.removeEventListener("holmes:ready", fireBootstrap);
-  }, [items, mounted]);
+    document.addEventListener("holmes:ready", onReady);
+    return () => document.removeEventListener("holmes:ready", onReady);
+  }, [mounted]);
 
   const addItem = useCallback((item: Omit<CartItem, "id" | "quantity"> & { quantity?: number }) => {
     const qty = item.quantity ?? 1;

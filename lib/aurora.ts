@@ -42,7 +42,7 @@ export function getTenantSlug(): string {
   return tenantSlug;
 }
 
-/** Store config — safe for client: fetches via /api/store/config (keeps API key server-side). */
+/** Store config - safe for client: fetches via /api/store/config (keeps API key server-side). */
 export async function getStoreConfig(): Promise<{
   enabled: boolean;
   catalogTableSlug?: string;

@@ -70,7 +70,7 @@ export async function YouMayAlsoLike({
                     <img src={imageUrl} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-aurora-muted text-2xl">
-                      —
+                       - 
                     </div>
                   )}
                 </div>

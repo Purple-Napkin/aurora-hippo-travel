@@ -14,7 +14,7 @@ function formatPrice(cents: number): string {
 }
 
 function formatDate(iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return " - ";
   try {
     return new Date(iso).toLocaleDateString("en-GB", {
       day: "numeric",
@@ -22,7 +22,7 @@ function formatDate(iso: string | undefined): string {
       year: "numeric",
     });
   } catch {
-    return "—";
+    return " - ";
   }
 }
 
@@ -112,7 +112,7 @@ export default function OrderDetailPage() {
             </div>
             <div className="flex justify-between">
               <dt className="text-aurora-muted">Status</dt>
-              <dd className="capitalize">{String(order.status ?? "—")}</dd>
+              <dd className="capitalize">{String(order.status ?? " - ")}</dd>
             </div>
             <div className="flex justify-between font-semibold pt-2">
               <dt>Total</dt>

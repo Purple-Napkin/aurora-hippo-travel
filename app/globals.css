@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
 
-/* Retail design system – light default, modern grocery aesthetic */
+/* Retail design system - light default, modern grocery aesthetic */
 :root,
 [data-theme="light"] {
   --aurora-bg: #F7F9F8;
@@ -118,7 +118,7 @@ body {
   font-family: var(--font-display);
 }
 
-/* Holmes basket bundle — vanilla HTML from script, styled here */
+/* Holmes basket bundle - vanilla HTML from script, styled here */
 [data-holmes="basket-bundle"] {
   font-family: var(--font-body);
 }
@@ -210,7 +210,7 @@ body {
   background: var(--aurora-primary-dark);
 }
 
-/* Holmes home sections — vanilla HTML from script, matches catalogue card style */
+/* Holmes home sections - vanilla HTML from script, matches catalogue card style */
 [data-holmes="home-sections"] [data-holmes-home-section] {
   margin-bottom: 2rem;
 }
@@ -289,7 +289,7 @@ body {
   padding-top: 0.25rem;
 }
 
-/* Holmes recommendations (You May Also Like) — vanilla HTML from script */
+/* Holmes recommendations (You May Also Like) - vanilla HTML from script */
 [data-holmes="recommendations"] [data-holmes-rec-title] {
   font-size: 1.25rem;
   font-weight: 700;
@@ -367,7 +367,7 @@ body {
   color: var(--aurora-primary);
 }
 
-/* Holmes floating banner (Discover more pop-up) — vanilla HTML from script */
+/* Holmes floating banner (Discover more pop-up) - vanilla HTML from script */
 #holmes-root[data-holmes-banner-backdrop] {
   position: fixed;
   inset: 0;
@@ -472,7 +472,7 @@ body {
   font-size: 1.2rem;
 }
 
-/* Holmes offer toast — vanilla HTML from script */
+/* Holmes offer toast - vanilla HTML from script */
 #holmes-offer-toast[data-holmes-toast] {
   position: fixed;
   bottom: 24px;
@@ -553,7 +553,7 @@ body {
   font-size: 1.2rem;
 }
 
-/* Holmes chat widget — vanilla HTML from script */
+/* Holmes chat widget - vanilla HTML from script */
 #holmes-chat-root[data-holmes-chat] {
   position: fixed;
   bottom: 24px;

@@ -21,7 +21,7 @@ function formatPrice(cents: number): string {
 }
 
 function formatDate(iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return " - ";
   try {
     return new Date(iso).toLocaleDateString("en-GB", {
       day: "numeric",
@@ -29,7 +29,7 @@ function formatDate(iso: string | undefined): string {
       year: "numeric",
     });
   } catch {
-    return "—";
+    return " - ";
   }
 }
 
@@ -105,7 +105,7 @@ export default function OrdersPage() {
                   <div>
                     <p className="font-medium">Order #{String(order.id).slice(-8)}</p>
                     <p className="text-sm text-aurora-muted">
-                      {formatDate(order.created_at as string)} · {String(order.status ?? "—")}
+                      {formatDate(order.created_at as string)} · {String(order.status ?? " - ")}
                     </p>
                   </div>
                 </div>

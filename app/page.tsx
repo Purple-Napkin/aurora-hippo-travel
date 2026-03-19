@@ -14,7 +14,7 @@ export default function HomePage() {
         <StoreContextBar />
       </div>
 
-      {/* Hero breaks out to full viewport width — no dark side bars */}
+      {/* Hero breaks out to full viewport width - no dark side bars */}
       <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
         <div data-holmes="home-hero">
           <HeroBanner />

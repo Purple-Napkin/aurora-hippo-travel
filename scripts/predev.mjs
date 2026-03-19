@@ -15,7 +15,7 @@ const apiUrl = process.env.AURORA_API_URL || process.env.NEXT_PUBLIC_AURORA_API_
 const apiKey = process.env.AURORA_API_KEY;
 
 if (!apiUrl || !apiKey) {
-  console.log("[predev] Skipping provision/seed — set AURORA_API_URL and AURORA_API_KEY to enable.");
+  console.log("[predev] Skipping provision/seed - set AURORA_API_URL and AURORA_API_KEY to enable.");
   process.exit(0);
 }
 
@@ -26,7 +26,7 @@ function run(script, label) {
     env: process.env,
   });
   if (res.status !== 0) {
-    console.warn(`[predev] ${label} failed (exit ${res.status}) — continuing anyway.`);
+    console.warn(`[predev] ${label} failed (exit ${res.status}) - continuing anyway.`);
   }
 }
 

@@ -7,7 +7,7 @@ const SCENARIOS = [
   {
     id: "urgent_replenishment",
     title: "Urgent Replenishment",
-    tagline: "In a rush — fast checkout",
+    tagline: "In a rush - fast checkout",
     description:
       "Simulate a hurried shopper: add an item to cart and go straight to checkout. Holmes hides delivery extras, promo codes, and cross-sell to compress the flow.",
     steps: [
@@ -27,7 +27,7 @@ const SCENARIOS = [
     description:
       "Simulate a relaxed browser: view several products, scroll slowly. Holmes expands recommendations and discovery sections instead of compressing.",
     steps: [
-      "Browse the catalogue, view 3–4 products",
+      "Browse the catalogue, view 3-4 products",
       "Scroll through the product page",
       "Observe: recommendations expanded, no hidden sections",
       "See the 'You May Also Like' section with Holmes picks",
@@ -39,7 +39,7 @@ const SCENARIOS = [
   {
     id: "ready_to_pay",
     title: "Ready to Pay",
-    tagline: "Cart full — payment focus",
+    tagline: "Cart full - payment focus",
     description:
       "Cart has items and you're at the payment step. Holmes highlights the payment section and hides non-essential checkout friction.",
     steps: [

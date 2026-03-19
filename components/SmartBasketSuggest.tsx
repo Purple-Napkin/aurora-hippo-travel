@@ -69,7 +69,7 @@ export function SmartBasketSuggest() {
                   {imageUrl ? (
                     <img src={imageUrl} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-aurora-muted">—</div>
+                    <div className="w-full h-full flex items-center justify-center text-aurora-muted"> - </div>
                   )}
                 </div>
                 <p className="text-sm font-medium truncate">{name}</p>

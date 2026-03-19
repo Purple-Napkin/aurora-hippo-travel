@@ -25,7 +25,7 @@ export function ProductImageGallery({ record }: ProductImageGalleryProps) {
   if (urls.length === 0) {
     return (
       <div className="rounded-component overflow-hidden aspect-square bg-aurora-surface flex items-center justify-center text-aurora-muted text-6xl">
-        —
+         - 
       </div>
     );
   }

@@ -107,7 +107,7 @@ function CheckoutAcmeContent() {
       <div className="rounded-component bg-aurora-surface border border-aurora-border p-6">
         <h1 className="text-xl font-semibold mb-2">ACME Payment</h1>
         <p className="text-sm text-aurora-muted mb-6">
-          Test payment provider — no real card required. Click Pay to simulate
+          Test payment provider - no real card required. Click Pay to simulate
           a successful checkout.
         </p>
 

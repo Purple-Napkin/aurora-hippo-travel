@@ -1,6 +1,6 @@
-# Aurora Ecom Starter — Major Supermarket Chain Style Guide
+# Aurora Ecom Starter - Major Supermarket Chain Style Guide
 
-A design system for storefronts that convey **trust, freshness, and professionalism** — the hallmarks of established supermarket chains (Tesco, Sainsbury's, Waitrose, Coles, Woolworths).
+A design system for storefronts that convey **trust, freshness, and professionalism** - the hallmarks of established supermarket chains (Tesco, Sainsbury's, Waitrose, Coles, Woolworths).
 
 ---
 
@@ -9,7 +9,7 @@ A design system for storefronts that convey **trust, freshness, and professional
 ### Principles
 - **Legibility over personality.** Supermarkets serve all ages; type must be instantly readable.
 - **One family, multiple weights.** Single-font systems feel coherent and professional.
-- **Avoid geometric display fonts** (Syne, Space Grotesk, etc.) — they read as techy/startup, not grocery.
+- **Avoid geometric display fonts** (Syne, Space Grotesk, etc.) - they read as techy/startup, not grocery.
 
 ### Font Stack
 | Role | Font | Weights | Use |
@@ -19,8 +19,8 @@ A design system for storefronts that convey **trust, freshness, and professional
 **Why Plus Jakarta Sans?** Humanist sans-serif with warmth and clarity. Used by premium brands. Excellent readability at scale. Slightly rounded terminals feel approachable without being playful.
 
 ### Scale
-- **Headlines (h1):** 2.25rem–3.5rem (36–56px), weight 700, tracking-tight
-- **Subheadings (h2):** 1.25rem–1.5rem (20–24px), weight 600
+- **Headlines (h1):** 2.25rem-3.5rem (36-56px), weight 700, tracking-tight
+- **Subheadings (h2):** 1.25rem-1.5rem (20-24px), weight 600
 - **Body:** 1rem (16px), weight 400; line-height 1.5
 - **Small / metadata:** 0.875rem (14px), weight 500 or 400
 
@@ -28,7 +28,7 @@ A design system for storefronts that convey **trust, freshness, and professional
 
 ## 2. Color Palette
 
-### Primary (Light Theme — Default for Supermarkets)
+### Primary (Light Theme - Default for Supermarkets)
 | Token | Hex | Use |
 |-------|-----|-----|
 | `--supermarket-bg` | `#F8FAF5` | Page background (subtle green-white) |
@@ -50,10 +50,10 @@ A design system for storefronts that convey **trust, freshness, and professional
 ## 3. Components
 
 ### Hero
-- **Background:** Full-bleed produce imagery with light overlay (20–30% white) — never dark
-- **Headline:** Bold, confident, not shouty. Max 8–10 words.
+- **Background:** Full-bleed produce imagery with light overlay (20-30% white) - never dark
+- **Headline:** Bold, confident, not shouty. Max 8-10 words.
 - **CTA:** Primary green button; secondary outline or text button
-- **No heavy drop shadows** — keep it clean
+- **No heavy drop shadows** - keep it clean
 
 ### Navigation
 - White or near-white bar
@@ -61,7 +61,7 @@ A design system for storefronts that convey **trust, freshness, and professional
 - Clear hierarchy: logo | links | search | location | cart | account
 
 ### Product Cards
-- White background, 8–12px border radius
+- White background, 8-12px border radius
 - Subtle shadow: `0 1px 3px rgba(0,0,0,0.08)`
 - Hover: slight lift and stronger shadow
 - Price prominent; sale badge in accent orange
@@ -92,7 +92,7 @@ A design system for storefronts that convey **trust, freshness, and professional
 
 ## 6. Motion & Interaction
 
-- **Subtle:** 200–300ms transitions
+- **Subtle:** 200-300ms transitions
 - **Hover:** Slight opacity or shadow change; no aggressive animations
 - **Focus:** Visible outline for accessibility
 

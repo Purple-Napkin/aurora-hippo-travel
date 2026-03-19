@@ -76,7 +76,7 @@ export function CartLink() {
                       <img src={item.imageUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-aurora-muted text-lg">
-                        —
+                         - 
                       </div>
                     )}
                   </div>

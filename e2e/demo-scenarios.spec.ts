@@ -31,7 +31,7 @@ test.describe("Holmes Demo Scenarios", () => {
     const addToCartBtn = page.getByRole("button", { name: /add to cart/i }).first();
     const productCount = await addToCartBtn.count();
     if (productCount === 0) {
-      test.skip(true, "No products in catalog — run with provisioned store for full E2E");
+      test.skip(true, "No products in catalog - run with provisioned store for full E2E");
       return;
     }
 
@@ -65,7 +65,7 @@ test.describe("Holmes Demo Scenarios", () => {
     const productLink = page.locator('a[href^="/catalogue/"]').first();
     const linkCount = await productLink.count();
     if (linkCount === 0) {
-      test.skip(true, "No products — run with provisioned store for full E2E");
+      test.skip(true, "No products - run with provisioned store for full E2E");
       return;
     }
 

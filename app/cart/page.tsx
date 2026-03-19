@@ -102,7 +102,7 @@ export default function CartPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="w-full h-full flex items-center justify-center text-aurora-muted text-xs">—</span>
+                    <span className="w-full h-full flex items-center justify-center text-aurora-muted text-xs"> - </span>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

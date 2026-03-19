@@ -9,8 +9,8 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
 ## Quick Start
 
 1. **Create or clone:**
-   - **Option A — From Studio:** Sign up at [Aurora](https://aurora.mandeville.digital), create a workspace from the "Hippo Ecom" template (`free-ecom`). Studio provisions the base schema; the storefront adds the full schema on first run.
-   - **Option B — Clone:**
+   - **Option A - From Studio:** Sign up at [Aurora](https://aurora.mandeville.digital), create a workspace from the "Hippo Ecom" template (`free-ecom`). Studio provisions the base schema; the storefront adds the full schema on first run.
+   - **Option B - Clone:**
    ```bash
    git clone https://github.com/marceldupr/aurora-starter-ecom.git
    cd aurora-starter-ecom
@@ -41,14 +41,14 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
 
 ## Features
 
-- **Location & Store Selection** — Set delivery location on a map, browse nearby stores
-- **Meilisearch Search** — Live product search dropdown in header
-- **Product Catalogue** — Featured, Bestsellers, New Arrivals, On Sale tabs; category filters
-- **Product Detail** — Tabs (Details, Nutrition, Feedback), You May Also Like
-- **Basket & Checkout** — Multi-step checkout with delivery slot selection; ACME test payment flow (`/checkout/acme`, `/checkout/success`)
-- **Holmes** — AI mission inference; one-click bundle checkout when enabled
-- **Promotions** — Store-specific offers and on-sale products
-- **Account** — Profile, Orders, Addresses (integrate Supabase Auth for full features)
+- **Location & Store Selection** - Set delivery location on a map, browse nearby stores
+- **Meilisearch Search** - Live product search dropdown in header
+- **Product Catalogue** - Featured, Bestsellers, New Arrivals, On Sale tabs; category filters
+- **Product Detail** - Tabs (Details, Nutrition, Feedback), You May Also Like
+- **Basket & Checkout** - Multi-step checkout with delivery slot selection; ACME test payment flow (`/checkout/acme`, `/checkout/success`)
+- **Holmes** - AI mission inference; one-click bundle checkout when enabled
+- **Promotions** - Store-specific offers and on-sale products
+- **Account** - Profile, Orders, Addresses (integrate Supabase Auth for full features)
 
 ## Setup
 
@@ -72,10 +72,10 @@ A full-featured retail storefront for Aurora Studio. Showcases Aurora capabiliti
 
 Provision the required tables before using the template:
 
-**Option A — Import in Aurora Studio**  
+**Option A - Import in Aurora Studio**  
 Data Builder → Import from JSON → use `schema/base-store-schema-import.json`
 
-**Option B — Provision script** (requires tenant admin API key)
+**Option B - Provision script** (requires tenant admin API key)
 ```bash
 AURORA_API_URL=https://api.yourapp.com AURORA_API_KEY=aur_xxx TENANT_SLUG=your-tenant pnpm schema:provision
 ```
@@ -95,7 +95,7 @@ For standalone deployment, set `NEXT_PUBLIC_APP_URL` on the Aurora API to your s
 
 ## ACME Checkout
 
-When Stripe is not configured, the template uses **ACME** — a test payment provider. Checkout flow:
+When Stripe is not configured, the template uses **ACME** - a test payment provider. Checkout flow:
 
 1. Create session via `/store/checkout/sessions` → returns ACME session URL
 2. User completes payment at `/checkout/acme?session=acme_xxx`
@@ -111,6 +111,6 @@ From Aurora Studio: Settings → Storefront → Deploy to Vercel. Uses template 
 
 ## SDK Version
 
-This template uses `@aurora-studio/sdk@0.2.12`. Holmes features (offers, chat, home personalization, session attribution, time-to-completion metrics) are available in SDK 0.2.7+.
+This template uses `@aurora-studio/sdk@0.2.14`. Holmes features (offers, chat, home personalization, session attribution, time-to-completion metrics) are available in SDK 0.2.7+.
 
 _Last build trigger: March 2026_

@@ -202,7 +202,7 @@ export default function CheckoutPage() {
                           onChange={() => setSelectedSlotId(slot.id)}
                         />
                         <span>
-                          {DAYS[slot.day_of_week]} {slot.start_time}–{slot.end_time}
+                          {DAYS[slot.day_of_week]} {slot.start_time}-{slot.end_time}
                         </span>
                       </label>
                     ))}

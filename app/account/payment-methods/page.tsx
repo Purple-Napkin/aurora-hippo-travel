@@ -45,7 +45,7 @@ export default function PaymentMethodsPage() {
             </p>
             <p className="text-aurora-muted text-sm">
               To add a payment method, complete a purchase at checkout. Your card details are
-              never stored on our servers when using Stripe — they are handled securely by Stripe.
+              never stored on our servers when using Stripe - they are handled securely by Stripe.
             </p>
           </div>
         </div>

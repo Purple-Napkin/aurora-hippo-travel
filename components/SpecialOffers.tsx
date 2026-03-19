@@ -100,7 +100,7 @@ export async function SpecialOffers() {
             <Link key={id} href="/offers" className="block">
               <div className="p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 shadow-sm transition-all">
                 <div className="aspect-square rounded-component bg-aurora-surface-hover mb-3 flex items-center justify-center text-aurora-muted text-3xl">
-                  —
+                   - 
                 </div>
                 <p className="font-semibold text-sm truncate">{name}</p>
                 {label && (
@@ -141,7 +141,7 @@ export async function SpecialOffers() {
                   <img src={imageUrl} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-aurora-muted text-4xl">
-                    —
+                     - 
                   </div>
                 )}
               </div>

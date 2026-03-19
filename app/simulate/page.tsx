@@ -603,7 +603,7 @@ export default function SimulatePage() {
         {stepIndex >= 0 ? (
           <div className="space-y-1">
             <div className="text-sm font-medium text-white">
-              Step {stepIndex + 1} of {simulationSteps.length} — {getStepAnnotation(simulationSteps[stepIndex]!, stepIndex, scenario).title}
+              Step {stepIndex + 1} of {simulationSteps.length} - {getStepAnnotation(simulationSteps[stepIndex]!, stepIndex, scenario).title}
             </div>
             {getStepAnnotation(simulationSteps[stepIndex]!, stepIndex, scenario).lookFor && (
               <div className="text-xs text-green-300">
