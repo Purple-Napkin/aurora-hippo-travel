@@ -96,7 +96,7 @@ export function ForgotSuggestions() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col gap-3">
           {products.map((p) => {
             const id = (p.recordId ?? p.id) as string;
             const name = p.name ?? p.title ?? String(p.recordId ?? p.id);
@@ -104,7 +104,7 @@ export function ForgotSuggestions() {
             return (
               <div
                 key={id}
-                className="flex items-center gap-3 p-2 rounded-lg bg-aurora-surface-hover border border-aurora-border"
+                className="flex items-center gap-3 p-2 rounded-lg bg-aurora-surface-hover border border-aurora-border w-full"
               >
                 <Link href={`/catalogue/${id}`} className="flex items-center gap-3 flex-1 min-w-0">
                   <div className="w-12 h-12 rounded-lg bg-aurora-surface overflow-hidden shrink-0">
