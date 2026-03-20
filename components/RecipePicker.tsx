@@ -15,7 +15,6 @@ export function RecipePicker() {
   const { items } = useCart();
   const missionData = useMissionAware();
   const [combos, setCombos] = useState<Array<{ slug: string; title: string; productImageUrls?: string[] }>>([]);
-  const [loading, setLoading] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
@@ -24,7 +23,6 @@ export function RecipePicker() {
       return;
     }
     let cancelled = false;
-    setLoading(true);
     holmesCombosForCart({
       cartIds: items.map((i) => i.recordId).filter(Boolean),
       cartNames: items.map((i) => i.name).filter(Boolean),
@@ -40,14 +38,9 @@ export function RecipePicker() {
       })
       .catch(() => {
         if (!cancelled) setCombos([]);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
   }, [items.length, items.map((i) => i.recordId).join(","), dismissed]);
-
-  const showPlaceholder = items.length >= 2 && !dismissed && (loading || combos.length === 0);
 
   const handleSelect = async (combo: { slug: string; title: string }) => {
     const sid =
@@ -65,23 +58,7 @@ export function RecipePicker() {
     }
   };
 
-  if (items.length < 2 || dismissed) return null;
-
-  if (showPlaceholder) {
-    return (
-      <div
-        id="recipe-picker"
-        className="pattern-well mb-6 p-4 rounded-xl border border-aurora-border bg-aurora-surface/60 scroll-mt-24"
-      >
-        <h3 className="font-semibold mb-1">Recipes from your basket</h3>
-        <p className="text-sm text-aurora-muted">
-          {loading
-            ? "Generating meal ideas from your items…"
-            : "No AI bundle options right now (need AI enabled on the store API, or try adding another item). Generic suggestions below are separate from Holmes recipes."}
-        </p>
-      </div>
-    );
-  }
+  if (items.length < 2 || dismissed || combos.length === 0) return null;
 
   return (
     <div
