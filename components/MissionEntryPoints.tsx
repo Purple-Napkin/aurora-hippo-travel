@@ -1,29 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { UtensilsCrossed, Cookie, Sparkles, Salad, Wine, MapPin } from "lucide-react";
+import { Luggage, Plane, Armchair, Plug, Map, Sparkles } from "lucide-react";
 import { useMissionAware } from "./MissionAwareHome";
 import { holmesMissionLockCombo } from "@aurora-studio/starter-core";
 import { shouldLockRecipeMissionForMissionPill } from "@/lib/holmes-mission-lock";
 
 const DEFAULT_MISSIONS = [
-  { label: "Cook dinner", href: "/catalogue?q=dinner", icon: UtensilsCrossed },
-  { label: "Quick snacks", href: "/catalogue?q=snacks", icon: Cookie },
-  { label: "Top up essentials", href: "/catalogue?q=essentials", icon: Sparkles },
-  { label: "Healthy week", href: "/catalogue?q=healthy", icon: Salad },
-  { label: "Hosting / guests", href: "/catalogue?q=wine+cheese", icon: Wine },
+  { label: "Pack for a trip", href: "/catalogue?q=luggage", icon: Luggage },
+  { label: "Weekend away", href: "/catalogue?q=travel", icon: Plane },
+  { label: "Comfort in transit", href: "/catalogue?q=travel+comfort", icon: Armchair },
+  { label: "Adapters & power", href: "/catalogue?q=adapter", icon: Plug },
+  { label: "Guides & maps", href: "/catalogue?q=guide", icon: Map },
 ] as const;
 
-const ICON_MAP: Record<string, typeof UtensilsCrossed> = {
-  "Cook dinner": UtensilsCrossed,
-  "Quick snacks": Cookie,
-  "Top up essentials": Sparkles,
-  "Healthy week": Salad,
-  "Hosting / guests": Wine,
-  "Travel essentials": MapPin,
-  "Packing checklist": MapPin,
+const ICON_MAP: Record<string, typeof Luggage> = {
+  "Pack for a trip": Luggage,
+  "Weekend away": Plane,
+  "Comfort in transit": Armchair,
+  "Adapters & power": Plug,
+  "Guides & maps": Map,
+  "Travel essentials": Sparkles,
+  "Packing checklist": Map,
   "Recipe ideas": Sparkles,
-  "Quick meals": UtensilsCrossed,
+  "Quick meals": Sparkles,
+  "Cook dinner": Sparkles,
+  "Quick snacks": Sparkles,
 };
 
 /** Mission-based entry points - Holmes-influenced when inference exists, else defaults. */
