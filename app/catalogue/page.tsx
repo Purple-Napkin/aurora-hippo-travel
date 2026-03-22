@@ -30,13 +30,9 @@ import { CatalogueStoreContentRail } from "@/components/CatalogueStoreContentRai
 import { ExampleDataCatalogueCTA } from "@/components/ExampleDataCatalogueCTA";
 
 const DEFAULT_CATEGORIES: CategoryItem[] = [
-  { name: "Bakery Items", slug: "bakery-items" },
-  { name: "Frozen Foods", slug: "frozen-foods" },
-  { name: "Vegetables", slug: "vegetables" },
-  { name: "Fruits", slug: "fruits" },
-  { name: "Dairy Products", slug: "dairy-products" },
-  { name: "Snacks", slug: "snacks" },
-  { name: "Beverages", slug: "beverages" },
+  { name: "Luggage", slug: "template-travel-luggage" },
+  { name: "Guides & maps", slug: "template-travel-guides" },
+  { name: "Travel accessories", slug: "template-travel-accessories" },
 ];
 
 function getImageUrl(record: Record<string, unknown>): string | null {

@@ -16,6 +16,10 @@ import {
   Drumstick,
   Shirt,
   UtensilsCrossed,
+  LayoutGrid,
+  Luggage,
+  Map,
+  Plane,
   type LucideIcon,
 } from "lucide-react";
 import { ProductImage } from "@aurora-studio/starter-core";
@@ -23,6 +27,10 @@ import { ProductImage } from "@aurora-studio/starter-core";
 /** Map category slug to icon when no image provided */
 function getCategoryIcon(slug: string): LucideIcon {
   const s = slug.toLowerCase().replace(/\s+/g, "-");
+  if (s.includes("luggage") || s.includes("suitcase")) return Luggage;
+  if (s.includes("guide") || s.includes("maps")) return Map;
+  if (s.includes("travel") && s.includes("accessor")) return Plane;
+
   const map: Record<string, LucideIcon> = {
     "baby-food": Baby,
     baby: Baby,
@@ -59,7 +67,7 @@ function getCategoryIcon(slug: string): LucideIcon {
   for (const [key, icon] of Object.entries(map)) {
     if (s === key || s.includes(key) || key.includes(s)) return icon;
   }
-  return UtensilsCrossed;
+  return LayoutGrid;
 }
 
 /** Strong gradient presets – each category gets a stable color from slug hash */

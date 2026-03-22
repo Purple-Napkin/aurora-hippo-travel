@@ -2,13 +2,9 @@ import Link from "next/link";
 import { createAuroraClient } from "@aurora-studio/starter-core";
 
 const DEFAULT_CATEGORIES = [
-  { name: "Bakery Items", slug: "bakery-items" },
-  { name: "Frozen Foods", slug: "frozen-foods" },
-  { name: "Vegetables", slug: "vegetables" },
-  { name: "Fruits", slug: "fruits" },
-  { name: "Dairy Products", slug: "dairy-products" },
-  { name: "Snacks", slug: "snacks" },
-  { name: "Beverages", slug: "beverages" },
+  { name: "Luggage", slug: "template-travel-luggage" },
+  { name: "Guides & maps", slug: "template-travel-guides" },
+  { name: "Travel accessories", slug: "template-travel-accessories" },
 ];
 
 export async function CategoryNav() {

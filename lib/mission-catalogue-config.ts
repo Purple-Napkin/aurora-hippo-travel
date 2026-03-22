@@ -4,8 +4,8 @@
  */
 
 export const MISSION_CATEGORY_PRIORITY: Record<string, string[]> = {
-  travel_prep: ["snacks", "beverages", "dairy-products", "frozen-foods", "bakery-items"],
-  recipe_mission: ["vegetables", "fruits", "dairy-products", "bakery-items", "frozen-foods", "snacks", "beverages"],
+  travel_prep: ["template-travel-luggage", "template-travel-accessories", "template-travel-guides"],
+  recipe_mission: ["template-travel-accessories", "template-travel-luggage", "template-travel-guides"],
   urgent_replenishment: [],
   ready_to_pay: [],
   routine_shop: [],
@@ -15,7 +15,7 @@ export const MISSION_CATEGORY_PRIORITY: Record<string, string[]> = {
 
 export const MISSION_FOCUS_QUERY: Record<string, string> = {
   travel_prep: "travel essentials",
-  recipe_mission: "fresh ingredients",
+  recipe_mission: "travel comfort",
   urgent_replenishment: "essentials",
   ready_to_pay: "",
   routine_shop: "essentials",
