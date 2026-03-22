@@ -19,7 +19,12 @@ export function ClientProviders({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
       <DietaryExclusionsProvider>
-        <StoreConfigProvider>
+        <StoreConfigProvider
+          profileDefaults={{
+            verticalProfile: "travel_booking",
+            dietaryFilteringEnabled: false,
+          }}
+        >
           <AuthProvider>
             <CartProvider>
               <AddToCartFlyProvider>
