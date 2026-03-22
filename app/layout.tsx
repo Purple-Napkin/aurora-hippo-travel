@@ -4,7 +4,7 @@ import { ConditionalHolmesScript } from "@aurora-studio/starter-core";
 import { ClientProviders } from "@/components/ClientProviders";
 
 const siteName =
-  process.env.NEXT_PUBLIC_SITE_NAME ?? "Hippo Travel";
+  process.env.NEXT_PUBLIC_SITE_NAME ?? "Example Travel";
 
 export const metadata: Metadata = {
   title: siteName,

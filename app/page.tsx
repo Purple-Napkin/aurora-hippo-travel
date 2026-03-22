@@ -23,13 +23,13 @@ export default async function HomePage() {
         </div>
 
         {/* Hero + command surface - actionable intent capture with real retail warmth (z-10 so dropdown overlays Mission section) */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] z-10 hippo-travel-hero-wrap">
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] z-10 marketplace-travel-hero-wrap">
           <MissionAwareHero>
             <HeroCommandSurface />
           </MissionAwareHero>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-0 hippo-travel-home">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-0 marketplace-travel-home">
           <HolmesContextualWell />
 
           {/* Holmes injects "Complete your [Recipe]" when recipe mission + cart has items */}

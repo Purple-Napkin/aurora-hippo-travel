@@ -943,11 +943,11 @@ button.checkout-btn:active {
   font-size: 0.85rem;
 }
 
-/* Hippo Travel — OTA-style: larger hero headline, wider canvas, roomier product imagery in feed */
-.hippo-travel-hero-wrap [data-holmes="home-hero"] h1 {
+/* Travel template — OTA-style: larger hero headline, wider canvas, roomier product imagery in feed */
+.marketplace-travel-hero-wrap [data-holmes="home-hero"] h1 {
   font-size: clamp(1.75rem, 4.5vw, 3.5rem);
   line-height: 1.1;
 }
-.hippo-travel-home [class*="grid"][class*="md:grid-cols-2"] {
+.marketplace-travel-home [class*="grid"][class*="md:grid-cols-2"] {
   gap: 2rem;
 }
