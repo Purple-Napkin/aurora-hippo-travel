@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export default async function RecipePage({ params }: Props) {
+/** Trip bundle detail (Holmes combo). Canonical path under For You. */
+export default async function ForYouTripBundlePage({ params }: Props) {
   const { slug } = await params;
   const safeSlug = slug?.trim();
   if (!safeSlug) notFound();

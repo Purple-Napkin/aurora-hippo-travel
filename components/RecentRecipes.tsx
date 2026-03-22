@@ -6,7 +6,7 @@ import { ChefHat } from "lucide-react";
 
 /**
  * Displays recent recipes from the Holmes cache on the home page.
- * Links to /recipes/[slug] for each recipe.
+ * Links to /for-you/package/[slug] (Holmes combo / trip bundle records).
  */
 export async function RecentRecipes() {
   const timeOfDay = getTimeOfDay();
@@ -26,7 +26,7 @@ export async function RecentRecipes() {
         {recipes.map((r) => (
           <Link
             key={r.id}
-            href={`/recipes/${encodeURIComponent(r.slug)}`}
+            href={`/for-you/package/${encodeURIComponent(r.slug)}`}
             className="group block p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-sm sm:text-base truncate group-hover:text-aurora-primary">

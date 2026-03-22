@@ -10,13 +10,14 @@ import { formatPrice, toCents } from "@aurora-studio/starter-core";
 import { getMealToComplete } from "@/lib/cart-intelligence";
 import { AddToCartButton } from "@aurora-studio/starter-core";
 import { ProductImage } from "@aurora-studio/starter-core";
-import { getStoreConfig } from "@aurora-studio/starter-core";
+import { getStoreConfig, useVerticalProfile } from "@aurora-studio/starter-core";
 
 /** When cart has meal triggers (curry paste, pasta sauce), show "Complete your X" with complementary products. */
 export function CompleteYourMeal() {
   const { items, addItem } = useCart();
   const { store } = useStore();
   const { excludeDietary } = useDietaryExclusions();
+  const { verticalProfile, profileReady } = useVerticalProfile();
   const [products, setProducts] = useState<SearchHit[]>([]);
   const [loading, setLoading] = useState(false);
   const [catalogSlug, setCatalogSlug] = useState<string | null>(null);
@@ -25,6 +26,11 @@ export function CompleteYourMeal() {
   const inCartIds = new Set(items.map((i) => i.recordId));
 
   useEffect(() => {
+    if (
+      profileReady &&
+      (verticalProfile === "hospitality_stay" || verticalProfile === "travel_booking")
+    )
+      return;
     if (!mealData || !store?.id) return;
     setLoading(true);
     holmesRecipeProducts(mealData.meal, 6, {
@@ -65,7 +71,7 @@ export function CompleteYourMeal() {
       })
       .catch(() => setProducts([]))
       .finally(() => setLoading(false));
-  }, [mealData, store?.id, items.length, excludeDietary]);
+  }, [mealData, store?.id, items.length, excludeDietary, profileReady, verticalProfile]);
 
   useEffect(() => {
     getStoreConfig().then((c) => {
@@ -90,6 +96,12 @@ export function CompleteYourMeal() {
         });
     }
   };
+
+  if (
+    profileReady &&
+    (verticalProfile === "hospitality_stay" || verticalProfile === "travel_booking")
+  )
+    return null;
 
   if (!mealData || products.length === 0) return null;
 

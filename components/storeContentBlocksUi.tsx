@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ProductImage } from "@aurora-studio/starter-core";
-import { ChefHat, ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, Sparkles } from "lucide-react";
 import { ContentBlockProductCard } from "./ContentBlockProductCard";
 import { RecipeProductCollage } from "./RecipeProductCollage";
 
@@ -307,26 +307,44 @@ export function InspirationSection({
   );
 }
 
+const TRIP_PACKAGE_BASE = "/for-you/package";
+
 export function RecipeIdeasRail({
   recipesWithProducts,
   withHolmesMarkers = true,
+  variant = "grid",
 }: {
   recipesWithProducts: RecipeWithProducts[];
   withHolmesMarkers?: boolean;
+  variant?: "grid" | "letter";
 }) {
   if (recipesWithProducts.length === 0) return null;
+  const shellClass =
+    variant === "letter"
+      ? "mb-10 last:mb-0 border-l-[3px] border-aurora-primary/25 pl-5 sm:pl-6 py-1"
+      : "mb-10 last:mb-0";
   return (
     <section
       {...(withHolmesMarkers ? { "data-holmes-home-section": true } : {})}
-      className="mb-10 last:mb-0"
+      className={shellClass}
     >
       <h2
         {...(withHolmesMarkers ? { "data-holmes-home-section-title": true } : {})}
-        className="text-xl font-bold mb-4 flex items-center gap-2"
+        className={
+          variant === "letter"
+            ? "font-display text-2xl sm:text-3xl font-semibold tracking-tight text-aurora-text mb-2 flex items-center gap-2"
+            : "text-xl font-bold mb-4 flex items-center gap-2"
+        }
       >
-        <ChefHat className="w-6 h-6 text-aurora-primary" />
-        Recipe ideas
+        <Sparkles className="w-6 h-6 text-aurora-primary shrink-0" aria-hidden />
+        {variant === "letter" ? "A note for your trip" : "Trip bundles"}
       </h2>
+      {variant === "letter" ? (
+        <p className="text-sm text-aurora-muted max-w-2xl mb-6 leading-relaxed">
+          Trip bundles and add-ons we think pair with your basket — short, personal, and easy to add
+          in one go.
+        </p>
+      ) : null}
       <div
         {...(withHolmesMarkers ? { "data-holmes-home-section-grid": true } : {})}
         className="grid grid-cols-2 sm:grid-cols-4 gap-4"
@@ -334,7 +352,7 @@ export function RecipeIdeasRail({
         {recipesWithProducts.map((r) => (
           <Link
             key={r.id}
-            href={`/recipes/${encodeURIComponent(r.slug)}`}
+            href={`${TRIP_PACKAGE_BASE}/${encodeURIComponent(r.slug)}`}
             {...(withHolmesMarkers ? { "data-holmes-home-card": true } : {})}
             className="block p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 hover:shadow-md transition-all"
           >

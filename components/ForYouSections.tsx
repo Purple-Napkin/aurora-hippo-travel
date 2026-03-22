@@ -47,7 +47,7 @@ export async function ForYouSections() {
   if (sections.length === 0 && !hasRecipes) {
     return (
       <section className="space-y-6">
-        <h2 className="text-xl font-bold">Recipe ideas</h2>
+        <h2 className="text-xl font-bold">Trip bundles</h2>
         <p className="text-aurora-muted text-sm">
           Add items to your basket to see personalized suggestions.
         </p>
@@ -58,14 +58,22 @@ export async function ForYouSections() {
   if (sections.length === 0) {
     return (
       <div className="space-y-10">
-        <RecipeIdeasRail recipesWithProducts={recipesWithProducts} withHolmesMarkers={false} />
+        <RecipeIdeasRail
+          recipesWithProducts={recipesWithProducts}
+          withHolmesMarkers={false}
+          variant="letter"
+        />
       </div>
     );
   }
 
   return (
     <div className="space-y-10">
-      <RecipeIdeasRail recipesWithProducts={recipesWithProducts} withHolmesMarkers={false} />
+      <RecipeIdeasRail
+        recipesWithProducts={recipesWithProducts}
+        withHolmesMarkers={false}
+        variant="letter"
+      />
       <GroupedStoreContentSections
         sections={sections}
         currency={currencyCode}

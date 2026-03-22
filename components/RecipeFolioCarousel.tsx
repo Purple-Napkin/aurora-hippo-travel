@@ -12,10 +12,16 @@ import { AddToCartButton } from "@aurora-studio/starter-core";
 import { ProductImage } from "@aurora-studio/starter-core";
 import { formatPrice, toCents } from "@aurora-studio/starter-core";
 import type { SearchHit } from "@aurora-studio/starter-core";
+import { RecipeInstructions } from "@/components/RecipeInstructions";
+import { dedupeSearchHitsByRecordId, getPriceMajor } from "@/lib/catalogue-utils";
+
+function hitPriceCents(hit: SearchHit): number | undefined {
+  return toCents(getPriceMajor(hit as Record<string, unknown>));
+}
 
 type Combo = { slug: string; title: string; productImageUrls?: string[] };
 
-/** Rank recipes by cart match: best fit (meal) first, then cart ingredient matches, then rest. */
+/** Rank Holmes combo/recipe records by cart match (API still calls them recipes). */
 function rankRecipesByCart(
   recipes: Array<{ slug: string; title: string; description: string | null }>,
   cartNames: string[],
@@ -156,7 +162,7 @@ export function RecipeFolioCarousel() {
                 description: rec.description,
                 ingredients: rec.ingredients ?? [],
                 instructions: rec.instructions,
-                products: (prodRes.products ?? []) as SearchHit[],
+                products: dedupeSearchHitsByRecordId((prodRes.products ?? []) as SearchHit[]),
                 catalogSlug: slug,
               }
             : null
@@ -203,7 +209,7 @@ export function RecipeFolioCarousel() {
     for (const hit of recipe.products) {
       const id = (hit.recordId ?? hit.id) as string;
       const name = hit.name ?? hit.title ?? String(id);
-      const priceCents = toCents(hit.price);
+      const priceCents = hitPriceCents(hit);
       if (priceCents != null && priceCents > 0) {
         addItem({
           recordId: id,
@@ -216,11 +222,14 @@ export function RecipeFolioCarousel() {
     }
   };
 
-  const totalCents = recipe?.products.reduce((s, p) => s + (toCents(p.price) ?? 0), 0) ?? 0;
+  const totalCents = recipe?.products.reduce((s, p) => s + (hitPriceCents(p) ?? 0), 0) ?? 0;
 
   const recipeProductIds = new Set(
     recipe?.products
-      .filter((p) => toCents(p.price) != null && toCents(p.price)! > 0)
+      .filter((p) => {
+        const c = hitPriceCents(p);
+        return c != null && c > 0;
+      })
       .map((p) => `${recipe!.catalogSlug}:${(p.recordId ?? p.id) as string}`) ?? []
   );
   const inCartProductIds = new Set(items.filter((i) => recipeProductIds.has(i.id)).map((i) => i.id));
@@ -231,7 +240,7 @@ export function RecipeFolioCarousel() {
     return (
       <div className="max-w-2xl mx-auto py-16 px-6 text-center">
         <p className="font-folio text-2xl text-aurora-muted mb-4">
-          Add at least 2 items to your cart to see recipe ideas.
+          Add at least 2 items to your cart to see trip bundle ideas.
         </p>
         <Link
           href="/catalogue"
@@ -247,7 +256,7 @@ export function RecipeFolioCarousel() {
     return (
       <div className="max-w-2xl mx-auto py-16 px-6 text-center">
         <p className="font-folio text-2xl text-aurora-muted mb-4">
-          No recipe matches for your cart yet. Keep shopping!
+          No bundle matches for your cart yet. Keep shopping!
         </p>
         <Link
           href="/catalogue"
@@ -268,13 +277,13 @@ export function RecipeFolioCarousel() {
           onClick={goPrev}
           disabled={animating}
           className="absolute left-2 sm:left-4 top-[28%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-aurora-surface/95 backdrop-blur-sm shadow-lg border border-aurora-border flex items-center justify-center text-aurora-muted hover:text-aurora-primary hover:bg-aurora-surface disabled:opacity-50 transition-all"
-          aria-label="Previous recipe"
+          aria-label="Previous bundle"
         >
           <Carrot className="w-6 h-6" />
         </button>
       )}
 
-      {/* Recipe page */}
+      {/* Trip bundle card */}
       <div
         className="relative w-full max-w-2xl mx-4 sm:mx-16"
         style={{ perspective: "1200px" }}
@@ -294,7 +303,7 @@ export function RecipeFolioCarousel() {
         >
           {loading ? (
             <div className="font-folio text-2xl text-aurora-muted py-20 text-center">
-              Finding your recipe…
+              Loading your bundle…
             </div>
           ) : recipe ? (
             <div className="font-folio space-y-6 relative z-10">
@@ -309,7 +318,7 @@ export function RecipeFolioCarousel() {
               {recipe.ingredients.length > 0 && (
                 <section>
                   <h2 className="text-2xl font-semibold text-aurora-text mb-2" style={{ fontFamily: "Caveat, cursive" }}>
-                    Ingredients
+                    What&apos;s included
                   </h2>
                   <ul className="text-xl text-aurora-text space-y-1" style={{ fontFamily: "Caveat, cursive" }}>
                     {recipe.ingredients.map((ing, i) => (
@@ -325,10 +334,10 @@ export function RecipeFolioCarousel() {
               {recipe.instructions && (
                 <section>
                   <h2 className="text-2xl font-semibold text-aurora-text mb-2" style={{ fontFamily: "Caveat, cursive" }}>
-                    Instructions
+                    Details
                   </h2>
-                  <div className="text-xl text-aurora-text whitespace-pre-wrap" style={{ fontFamily: "Caveat, cursive" }}>
-                    {recipe.instructions}
+                  <div className="text-xl" style={{ fontFamily: "Caveat, cursive" }}>
+                    <RecipeInstructions text={recipe.instructions} />
                   </div>
                 </section>
               )}
@@ -341,7 +350,7 @@ export function RecipeFolioCarousel() {
                     {recipe.products.slice(0, 6).map((hit) => {
                       const id = (hit.recordId ?? hit.id) as string;
                       const name = hit.name ?? hit.title ?? String(id);
-                      const priceCents = toCents(hit.price);
+                      const priceCents = hitPriceCents(hit);
                       return (
                         <div
                           key={id}
@@ -361,7 +370,7 @@ export function RecipeFolioCarousel() {
                           >
                             {name}
                           </span>
-                          {priceCents != null && (
+                          {priceCents != null && priceCents > 0 && (
                             <AddToCartButton
                               recordId={id}
                               tableSlug={recipe.catalogSlug!}
@@ -398,11 +407,11 @@ export function RecipeFolioCarousel() {
               )}
               {currentSlug && (
                 <a
-                  href={`/recipes/${encodeURIComponent(currentSlug)}`}
+                  href={`/for-you/package/${encodeURIComponent(currentSlug)}`}
                   className="inline-block mt-4 text-aurora-primary hover:underline font-semibold text-xl cursor-pointer"
                   style={{ fontFamily: "Caveat, cursive" }}
                 >
-                  View full recipe →
+                  View full bundle →
                 </a>
               )}
             </div>
@@ -417,7 +426,7 @@ export function RecipeFolioCarousel() {
           onClick={goNext}
           disabled={animating}
           className="absolute right-2 sm:right-4 top-[28%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-aurora-surface/95 backdrop-blur-sm shadow-lg border border-aurora-border flex items-center justify-center text-aurora-muted hover:text-aurora-primary hover:bg-aurora-surface disabled:opacity-50 transition-all"
-          aria-label="Next recipe"
+          aria-label="Next bundle"
         >
           <Apple className="w-6 h-6" />
         </button>
@@ -434,7 +443,7 @@ export function RecipeFolioCarousel() {
               className={`w-2 h-2 rounded-full transition-colors ${
                 i === index ? "bg-aurora-primary" : "bg-aurora-border hover:bg-aurora-muted"
               }`}
-              aria-label={`Go to recipe ${i + 1}`}
+              aria-label={`Go to bundle ${i + 1}`}
             />
           ))}
         </div>

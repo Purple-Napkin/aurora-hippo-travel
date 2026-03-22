@@ -23,6 +23,7 @@ const ICON_MAP: Record<string, typeof Luggage> = {
   "Travel essentials": Sparkles,
   "Packing checklist": Map,
   "Recipe ideas": Sparkles,
+  "Trip bundles": Sparkles,
   "Quick meals": Sparkles,
   "Cook dinner": Sparkles,
   "Quick snacks": Sparkles,
@@ -47,7 +48,8 @@ export function MissionEntryPoints() {
       <div className="flex flex-wrap gap-3">
         {missions.map((m) => {
           const Icon = m.icon;
-          const href = m.label === "Recipe ideas" ? "/recipes" : m.href;
+          const href =
+            m.label === "Recipe ideas" || m.label === "Trip bundles" ? "/for-you" : m.href;
           return (
             <Link
               key={m.label}

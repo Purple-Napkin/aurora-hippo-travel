@@ -12,3 +12,13 @@ See [Marketplace storefront docs](../aurora-studio/docs/marketplace-storefront-t
 ```bash
 pnpm install && cp .env.example .env.local && pnpm dev
 ```
+
+### Vertical theme (CSS tokens)
+
+Defined in `app/globals.css` (`:root` / `[data-theme="dark"]`). Precedence: valid **`NEXT_PUBLIC_ACCENT_COLOR`** → Studio **`branding.accent_color`** from the API → template default (see async `app/layout.tsx` + `getResolvedStorefrontAccentForLayout` in starter-core).
+
+| Token | Light | Dark |
+|-------|-------|------|
+| `--aurora-primary` | `#c2410c` | `#c2410c` |
+| `--aurora-accent` | `#ea580c` | `#fb923c` |
+| `--aurora-bg` | `#fffbf7` | `#1c1410` |

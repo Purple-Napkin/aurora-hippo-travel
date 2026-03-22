@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@aurora-studio/starter-core";
 import { useDietaryExclusions } from "@/components/DietaryExclusionsContext";
-import { ProductImage } from "@aurora-studio/starter-core";
+import { ProductImage, useVerticalProfile } from "@aurora-studio/starter-core";
 
 type Props = {
   /** Pass when on product detail page */
@@ -19,6 +19,7 @@ type Props = {
  * Shows proactive "We have recipes" banner when Holmes has combos for the cart.
  */
 export function HolmesContextualWell({ currentProductId, variant = "default" }: Props) {
+  const { verticalProfile } = useVerticalProfile();
   const { items } = useCart();
   const { excludeDietary } = useDietaryExclusions();
   const [hint, setHint] = useState<string | null>(null);
@@ -69,17 +70,24 @@ export function HolmesContextualWell({ currentProductId, variant = "default" }: 
 
   // Proactive "We have suggestions" banner when combo exists but no rule-based hint
   if (hasCombo && !hint) {
+    const isHospitalityOrTravel =
+      verticalProfile === "hospitality_stay" || verticalProfile === "travel_booking";
     const isRecipeStyle =
+      !isHospitalityOrTravel &&
       comboTitle &&
       /recipe|dinner|meal|chicken|pasta|curry|stir.?fry|paella|risotto/i.test(comboTitle);
     const cartCopy =
       variant === "cart" && comboTitle
-        ? isRecipeStyle
-          ? `Complete your ${comboTitle} – add missing ingredients`
-          : `Complete your ${comboTitle} – add suggested items`
-        : isRecipeStyle
-          ? `Holmes found a recipe for what you&apos;re building${comboTitle ? ` – complete your ${comboTitle}` : ""}.`
-          : `Holmes has suggestions for your cart${comboTitle ? ` – ${comboTitle}` : ""}.`;
+        ? isHospitalityOrTravel
+          ? `Round out your trip — add extras for ${comboTitle}`
+          : isRecipeStyle
+            ? `Complete your ${comboTitle} – add missing ingredients`
+            : `Complete your ${comboTitle} – add suggested items`
+        : isHospitalityOrTravel
+          ? `We have trip ideas that match your basket${comboTitle ? ` — ${comboTitle}` : ""}.`
+          : isRecipeStyle
+            ? `Holmes found a recipe for what you&apos;re building${comboTitle ? ` – complete your ${comboTitle}` : ""}.`
+            : `Holmes has suggestions for your cart${comboTitle ? ` – ${comboTitle}` : ""}.`;
     return (
       <div className="pattern-well mb-6 p-4 rounded-xl border border-aurora-primary/30 bg-aurora-primary/5">
         <p className="text-sm text-aurora-text mb-2">{cartCopy}</p>
@@ -92,7 +100,11 @@ export function HolmesContextualWell({ currentProductId, variant = "default" }: 
               document.getElementById("basket-bundle")?.scrollIntoView({ behavior: "smooth" });
             }}
           >
-            {isRecipeStyle ? "See ingredients to add" : "See suggested items"}
+            {isHospitalityOrTravel
+              ? "See trip extras"
+              : isRecipeStyle
+                ? "See ingredients to add"
+                : "See suggested items"}
           </a>
         ) : variant === "for-you" ? null : (
           <Link

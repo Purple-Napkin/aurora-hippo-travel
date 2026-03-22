@@ -22,13 +22,15 @@ export function ForYouClientContent({
 
   return (
     <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Sparkles className="w-6 h-6 text-aurora-primary" aria-hidden />
-          For You
+      <div className="mb-10 border-l-[3px] border-aurora-primary/30 pl-5 sm:pl-7 py-2">
+        <p className="text-xs uppercase tracking-[0.2em] text-aurora-muted mb-2">Trip desk</p>
+        <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-aurora-text flex items-center gap-3">
+          <Sparkles className="w-7 h-7 text-aurora-primary shrink-0" aria-hidden />
+          For you
         </h1>
-        <p className="text-aurora-muted mt-1">
-          Bundles, recipes, and suggestions assembled just for you.
+        <p className="text-aurora-muted mt-3 max-w-2xl leading-relaxed text-sm sm:text-base">
+          A short note with trip bundles, extras, and ideas that fit what you&apos;re already adding
+          — not a separate &ldquo;combos&rdquo; aisle.
         </p>
         {belowTitle}
       </div>
@@ -38,7 +40,7 @@ export function ForYouClientContent({
 
         {hasCartItems && (
           <>
-            <section id="recipe-picker" className="scroll-mt-24">
+            <section id="combo-picker" className="scroll-mt-24">
               <RecipePicker />
             </section>
             <section id="basket-bundle" className="mb-6">
