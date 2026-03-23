@@ -16,7 +16,7 @@ type Props = {
 /**
  * Holmes "paying attention" well - subtle hint based on cart and mission.
  * Renders at top of cart, PDP, or home when Holmes has something relevant.
- * Shows proactive "We have recipes" banner when Holmes has combos for the cart.
+ * Shows a proactive bundle hint when Holmes has combos for the cart.
  */
 export function HolmesContextualWell({ currentProductId, variant = "default" }: Props) {
   const { verticalProfile } = useVerticalProfile();
@@ -86,7 +86,7 @@ export function HolmesContextualWell({ currentProductId, variant = "default" }: 
         : isHospitalityOrTravel
           ? `We have trip ideas that match your basket${comboTitle ? ` — ${comboTitle}` : ""}.`
           : isRecipeStyle
-            ? `Holmes found a recipe for what you&apos;re building${comboTitle ? ` – complete your ${comboTitle}` : ""}.`
+            ? `Holmes found a bundle for what you're building${comboTitle ? ` – complete your ${comboTitle}` : ""}.`
             : `Holmes has suggestions for your cart${comboTitle ? ` – ${comboTitle}` : ""}.`;
     return (
       <div className="pattern-well mb-6 p-4 rounded-xl border border-aurora-primary/30 bg-aurora-primary/5">
@@ -103,7 +103,7 @@ export function HolmesContextualWell({ currentProductId, variant = "default" }: 
             {isHospitalityOrTravel
               ? "See trip extras"
               : isRecipeStyle
-                ? "See ingredients to add"
+                ? "See items to add"
                 : "See suggested items"}
           </a>
         ) : variant === "for-you" ? null : (

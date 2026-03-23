@@ -2,11 +2,11 @@ import Link from "next/link";
 import { holmesRecentRecipes } from "@aurora-studio/starter-core";
 import { getTimeOfDay } from "@aurora-studio/starter-core";
 import { getDietaryFromCookie } from "@/lib/dietary-server";
-import { ChefHat } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 /**
- * Displays recent recipes from the Holmes cache on the home page.
- * Links to /for-you/package/[slug] (Holmes combo / trip bundle records).
+ * Displays recent trip bundles from the Holmes cache on the home page.
+ * Links to /for-you/package/[slug] (Holmes combo / bundle records).
  */
 export async function RecentRecipes() {
   const timeOfDay = getTimeOfDay();
@@ -19,8 +19,8 @@ export async function RecentRecipes() {
   return (
     <section className="py-10">
       <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <ChefHat className="w-6 h-6 text-aurora-primary" />
-        Recipe ideas for {timeOfDay}
+        <Sparkles className="w-6 h-6 text-aurora-primary shrink-0" aria-hidden />
+        Trip bundles for {timeOfDay}
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {recipes.map((r) => (

@@ -48,8 +48,7 @@ export function MissionEntryPoints() {
       <div className="flex flex-wrap gap-3">
         {missions.map((m) => {
           const Icon = m.icon;
-          const href =
-            m.label === "Recipe ideas" || m.label === "Trip bundles" ? "/for-you" : m.href;
+          const href = m.href;
           return (
             <Link
               key={m.label}
