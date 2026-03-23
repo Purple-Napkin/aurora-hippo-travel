@@ -29,12 +29,16 @@ interface RecipePageViewProps {
   recipeSlug: string;
   recipeTitle: string;
   currency?: string;
+  embeddedTitle?: boolean;
+  compact?: boolean;
 }
 
 export function RecipePageView({
   recipeSlug,
   recipeTitle,
   currency = "GBP",
+  embeddedTitle = false,
+  compact = false,
 }: RecipePageViewProps) {
   const { addItem } = useCart();
   const { excludeDietary } = useDietaryExclusions();
@@ -50,6 +54,11 @@ export function RecipePageView({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const TitleTag = embeddedTitle || compact ? "h2" : "h1";
+  const titleClass = compact
+    ? "font-display text-xl sm:text-2xl font-bold mb-1"
+    : "font-display text-2xl sm:text-3xl font-bold mb-2";
+
   useEffect(() => {
     holmesRecipeView(recipeSlug, recipe?.title ?? recipeTitle);
   }, [recipeSlug, recipe?.title, recipeTitle]);
@@ -58,7 +67,7 @@ export function RecipePageView({
     let cancelled = false;
     Promise.all([
       holmesRecipe(recipeSlug),
-      holmesRecipeProducts(recipeSlug, 24, {
+      holmesRecipeProducts(recipeSlug, compact ? 8 : 24, {
         excludeDietary: excludeDietary.length ? excludeDietary : undefined,
       }),
       getStoreConfig(),
@@ -84,12 +93,17 @@ export function RecipePageView({
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-    return () => { cancelled = true; };
-  }, [recipeSlug, excludeDietary]);
+    return () => {
+      cancelled = true;
+    };
+  }, [recipeSlug, excludeDietary, compact]);
+
+  const displayProducts = compact ? products.slice(0, 8) : products;
+  const displayTitle = recipe?.title ?? recipeTitle;
 
   const addAllToCart = () => {
     if (!catalogSlug) return;
-    for (const hit of products) {
+    for (const hit of displayProducts) {
       const id = (hit.recordId ?? hit.id) as string;
       const name = hit.name ?? hit.title ?? String(id);
       const priceCents = hitPriceCents(hit);
@@ -105,12 +119,16 @@ export function RecipePageView({
     }
   };
 
-  const totalCents = products.reduce((s, p) => s + (hitPriceCents(p) ?? 0), 0);
+  const totalCents = displayProducts.reduce((s, p) => s + (hitPriceCents(p) ?? 0), 0);
 
   if (loading) {
     return (
-      <div className="w-full py-16 flex flex-col items-center justify-center text-aurora-muted">
-        <div className="animate-pulse text-lg">Loading your bundle…</div>
+      <div
+        className={`w-full flex flex-col items-center justify-center text-aurora-muted ${compact ? "py-8" : "py-16"}`}
+      >
+        <div className={`animate-pulse ${compact ? "text-base" : "text-lg"}`}>
+          {compact ? "Loading bundle picks…" : "Loading your bundle…"}
+        </div>
       </div>
     );
   }
@@ -130,40 +148,51 @@ export function RecipePageView({
   }
 
   return (
-    <div className="w-full space-y-8">
+    <div className={`w-full ${compact ? "space-y-4" : "space-y-8"}`}>
       <header>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">
-          {getTimeOfDay() === "evening"
-            ? `Tonight's trip: ${recipe?.title ?? recipeTitle}`
-            : `Your bundle: ${recipe?.title ?? recipeTitle}`}
-        </h1>
-        {recipe?.origin_tidbit && (
+        {compact && (
+          <p className="text-xs font-semibold text-aurora-muted uppercase tracking-widest mb-2">
+            Finish packing this trip
+          </p>
+        )}
+        <TitleTag className={titleClass}>
+          {compact
+            ? displayTitle
+            : getTimeOfDay() === "evening"
+              ? `Tonight's trip: ${displayTitle}`
+              : `Your bundle: ${displayTitle}`}
+        </TitleTag>
+        {!compact && recipe?.origin_tidbit && (
           <p className="text-aurora-muted text-sm sm:text-base max-w-2xl italic">
             {recipe.origin_tidbit}
           </p>
         )}
-        {recipe?.description && (
+        {!compact && recipe?.description && (
           <p className="mt-3 text-aurora-text text-base">{recipe.description}</p>
         )}
-        <div className="mt-4">
-          <HolmesTidbits entity={recipeSlug} entityType="recipe" />
-        </div>
+        {!compact && (
+          <div className="mt-4">
+            <HolmesTidbits entity={recipeSlug} entityType="recipe" />
+          </div>
+        )}
       </header>
 
-      {products.length > 0 && catalogSlug && (
+      {displayProducts.length > 0 && catalogSlug && (
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={addAllToCart}
-            className="px-4 py-2 rounded-lg bg-aurora-primary text-white text-sm font-semibold hover:bg-aurora-primary-dark transition-colors"
+            className={`rounded-lg bg-aurora-primary text-white font-semibold hover:bg-aurora-primary-dark transition-colors ${
+              compact ? "px-3 py-2 text-sm" : "px-4 py-2 text-sm"
+            }`}
           >
-            Add all to cart
+            {compact ? "Add bundle picks" : "Add all to cart"}
             {totalCents > 0 && ` – ${formatPrice(totalCents, currency)}`}
           </button>
         </div>
       )}
 
-      {recipe?.ingredients && recipe.ingredients.length > 0 && (
+      {!compact && recipe?.ingredients && recipe.ingredients.length > 0 && (
         <section>
           <h2 className="font-display text-lg font-semibold mb-3">What&apos;s included</h2>
           <ul className="list-disc list-inside text-aurora-text space-y-1">
@@ -178,18 +207,26 @@ export function RecipePageView({
         </section>
       )}
 
-      {recipe?.instructions && (
+      {!compact && recipe?.instructions && (
         <section>
           <h2 className="font-display text-lg font-semibold mb-3">Details</h2>
           <RecipeInstructions text={recipe.instructions} />
         </section>
       )}
 
-      {products.length > 0 && (
+      {displayProducts.length > 0 && (
         <section>
-          <h2 className="font-display text-lg font-semibold mb-4">Products in this bundle</h2>
-          <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 xl:grid-cols-5">
-            {products.map((hit) => {
+          <h2 className={`font-display font-semibold mb-4 ${compact ? "text-base" : "text-lg"}`}>
+            {compact ? "Top adds for this bundle" : "Products in this bundle"}
+          </h2>
+          <div
+            className={
+              compact
+                ? "grid w-full grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4"
+                : "grid w-full grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 xl:grid-cols-5"
+            }
+          >
+            {displayProducts.map((hit) => {
               const id = (hit.recordId ?? hit.id) as string;
               const name = hit.name ?? hit.title ?? String(id);
               const priceCents = hitPriceCents(hit);

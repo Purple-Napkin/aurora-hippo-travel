@@ -28,6 +28,7 @@ import { RecipeMissionHero } from "./RecipeMissionHero";
 import { getTimeOfDay } from "@aurora-studio/starter-core";
 import { holmesMissionLockCombo } from "@aurora-studio/starter-core";
 import { shouldLockRecipeMissionForMissionPill } from "@/lib/holmes-mission-lock";
+import { shouldFullComboHomeTakeover } from "@/lib/intent-mission";
 import {
   fullWidthHeroBandClass,
   splitHeroFallbackTitleClass,
@@ -252,12 +253,19 @@ export function CommandSurface({
 
   const quickActions = rawActions.filter((a) => !a.authOnly || user);
 
-  const isRecipeMission =
-    homeData?.mode === "recipe_mission" && homeData.recipeSlug && homeData.recipeTitle;
+  const isFullComboHero =
+    !!homeData &&
+    shouldFullComboHomeTakeover({
+      mode: homeData.mode,
+      recipeSlug: homeData.recipeSlug,
+      recipeTitle: homeData.recipeTitle,
+      band: homeData.activeMission?.band,
+      missionKey: homeData.activeMission?.key,
+    });
 
   const formContentInner = (
     <>
-      {isRecipeMission && (
+      {isFullComboHero && (
         <div className="mb-6">
           <RecipeMissionHero
             recipeTitle={homeData.recipeTitle!}
@@ -268,15 +276,15 @@ export function CommandSurface({
       )}
       <h1
         className={`font-sans font-bold tracking-tight text-aurora-text mb-2 leading-tight ${
-          isRecipeMission
+          isFullComboHero
             ? "text-2xl sm:text-3xl md:text-4xl"
             : "travel-home-hero-headline text-xl sm:text-2xl md:text-3xl lg:text-[2rem]"
         }`}
       >
-        {isRecipeMission ? "Or something else?" : "Ready for an adventure?"}
+        {isFullComboHero ? "Or something else?" : "Ready for an adventure?"}
       </h1>
       <p className="text-aurora-muted text-sm sm:text-base mb-5 font-medium leading-snug max-w-xl">
-        {isRecipeMission
+        {isFullComboHero
           ? "Let's get you there fast"
           : verticalMissionSubtitle(verticalProfile)}
       </p>
@@ -306,7 +314,7 @@ export function CommandSurface({
         </div>
       </div>
 
-      {!isRecipeMission && (
+      {!isFullComboHero && (
         <div className="travel-home-popular mb-6">
           <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-aurora-muted mb-2">
             Popular search
@@ -354,7 +362,7 @@ export function CommandSurface({
         )}
       </div>
 
-      {!isRecipeMission && <HomeTrustList storeName={store?.name} />}
+      {!isFullComboHero && <HomeTrustList storeName={store?.name} />}
     </>
   );
 

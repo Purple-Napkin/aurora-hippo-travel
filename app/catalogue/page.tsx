@@ -365,8 +365,6 @@ function CatalogueContent() {
 
         {/* Main content - min-w-0 lets it shrink; flex-1 lets it grow to fill space */}
         <main className="flex-1 min-w-0 w-full sm:min-w-[280px] flex flex-col">
-          <CatalogueStoreContentRail region="catalogue_below_filters" className="mb-6" />
-
           <div
             className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ${recipeTitle ? "mb-4" : "mb-3"}`}
           >
@@ -654,6 +652,8 @@ function CatalogueContent() {
             </div>
           )}
           </div>
+
+          <CatalogueStoreContentRail region="catalogue_below_filters" className="mt-6 mb-0" />
         </main>
       </div>
     </div>
