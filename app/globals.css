@@ -19,6 +19,10 @@
   --aurora-accent: #ea580c;
   --aurora-promo: #d97706;
   --aurora-error: #ef4444;
+  --aurora-mission-bar-bg: #9a3412;
+  --aurora-mission-bar-border: rgba(154, 52, 18, 0.45);
+  --aurora-mission-bar-muted: rgba(255, 247, 237, 0.9);
+  --aurora-mission-bar-faint: rgba(255, 247, 237, 0.78);
   --font-display: "Fraunces", "Manrope", "Plus Jakarta Sans", system-ui, serif;
   --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
   /* Light pattern wells (must live here — a later bare :root would override [data-theme="dark"]). */
@@ -38,6 +42,10 @@
   --aurora-accent: #fb923c;
   --aurora-promo: #fbbf24;
   --aurora-error: #f87171;
+  --aurora-mission-bar-bg: #7c2d12;
+  --aurora-mission-bar-border: rgba(251, 191, 123, 0.25);
+  --aurora-mission-bar-muted: rgba(255, 247, 237, 0.88);
+  --aurora-mission-bar-faint: rgba(255, 247, 237, 0.72);
   --pattern-cream: rgba(28, 22, 18, 0.97);
   --pattern-warm: rgba(60, 40, 28, 0.5);
 }

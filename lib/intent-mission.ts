@@ -22,7 +22,7 @@ export function isTravelLikeMission(key: string | undefined): boolean {
   return TRAVEL_MISSION_KEYS.has(key);
 }
 
-function mealTimeTrustMisfitForTravel(summary: string): boolean {
+function isGroceryEraTrustSummary(summary: string): boolean {
   return (
     /because it'?s (dinner|breakfast|lunch) time/i.test(summary) ||
     /^Breakfast ideas for your morning/i.test(summary) ||
@@ -39,8 +39,17 @@ export function alignedMissionTrustLine(
 ): string {
   const s = apiSummary?.trim() ?? "";
 
+  if (s && isGroceryEraTrustSummary(s)) {
+    if (isTravelLikeMission(key)) {
+      return "Planning a trip? We've picked travel essentials.";
+    }
+    return hasCartItems
+      ? "Trip-focused picks from your basket and recent views."
+      : "Trip-focused picks from your search and browsing.";
+  }
+
   if (isTravelLikeMission(key)) {
-    if (!s || mealTimeTrustMisfitForTravel(s)) {
+    if (!s || isGroceryEraTrustSummary(s)) {
       return "Planning a trip? We've picked travel essentials.";
     }
     return s;
