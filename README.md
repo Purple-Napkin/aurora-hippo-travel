@@ -7,7 +7,7 @@ Travel / experiences-oriented Aurora storefront template (same commerce core as 
 - **Studio:** template **Travel (example template)** (`aurora-template-travel`).
 - **GitHub:** `Purple-Napkin/aurora-template-travel`.
 
-See [Marketplace storefront docs](../aurora-studio/docs/marketplace-storefront-templates.md).
+See [Storefront deploy](../aurora-studio/docs/06-storefront-deploy.md).
 
 ```bash
 pnpm install && cp .env.example .env.local && pnpm dev
