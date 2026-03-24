@@ -27,7 +27,7 @@ const BUNDLE_MISSION_KEYS = new Set([
 
 function missionCta(key: string, itemCount: number): { href: string; label: string } {
   if (isTravelLikeMission(key)) {
-    return { href: "/catalogue?q=travel+essentials", label: "Shop travel essentials" };
+    return { href: "/catalogue?q=travel+essentials", label: "Prepare travel essentials" };
   }
   if (BUNDLE_MISSION_KEYS.has(key) && itemCount >= 2) {
     return { href: "/for-you", label: "View bundles" };

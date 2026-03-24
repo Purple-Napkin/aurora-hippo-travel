@@ -16,8 +16,8 @@ export function ShoppingListTemplates() {
 
   return (
     <section className="py-6">
-      <h2 className="text-xs font-semibold text-aurora-muted uppercase tracking-widest mb-4">
-        Suggested lists
+      <h2 className="text-[0.62rem] font-semibold text-stone-500 dark:text-aurora-muted uppercase tracking-[0.18em] mb-4">
+        Packing shortlists
       </h2>
       <div className="flex flex-wrap gap-3">
         {templates.map((t) => {
@@ -29,9 +29,9 @@ export function ShoppingListTemplates() {
             <Link
               key={t.slug}
               href={href}
-              className="flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-aurora-surface border border-aurora-border/80 shadow-sm hover:border-aurora-primary/40 hover:shadow-md hover:shadow-aurora-primary/5 transition-all font-medium text-aurora-text"
+              className="travel-destination-card flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-aurora-surface border border-aurora-border/80 shadow-sm font-medium text-aurora-text"
             >
-              <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-aurora-primary/10 text-aurora-primary">
+              <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-aurora-primary/12 to-amber-500/10 text-aurora-primary ring-1 ring-aurora-primary/10">
                 <ListChecks className="w-5 h-5" />
               </span>
               <div>

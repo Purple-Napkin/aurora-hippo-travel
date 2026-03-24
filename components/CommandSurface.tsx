@@ -53,35 +53,37 @@ function FeaturedBundleCard({ project }: { project: StoreFeaturedProject }) {
     <div className="store-featured-project overflow-hidden rounded-xl border border-zinc-200/90 bg-[var(--aurora-surface)] shadow-[0_2px_14px_rgba(15,23,42,0.07)]">
       <Link
         href={href}
-        aria-label={`View bundle: ${project.title}`}
-        className="group block rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora-primary/30 focus-visible:ring-offset-2"
+        aria-label={`Explore curated journey: ${project.title}`}
+        className="group block rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-aurora-bg"
       >
         <div className="store-featured-project__media relative aspect-[4/3] w-full overflow-hidden bg-zinc-100">
           {project.imageUrl ? (
             <img
               src={project.imageUrl}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out"
               loading="lazy"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200">
-              <Luggage className="h-14 w-14 text-zinc-400" aria-hidden />
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-stone-200 via-amber-50/80 to-stone-300">
+              <Luggage className="h-14 w-14 text-stone-400" aria-hidden />
             </div>
           )}
         </div>
         <div className="store-featured-project__body p-4 sm:p-5">
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-aurora-muted">
-            Featured bundle
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-stone-500 dark:text-aurora-muted">
+            Curated for your trip
           </p>
-          <h3 className="mt-1.5 font-display text-lg font-bold leading-snug tracking-tight text-aurora-text transition-colors group-hover:text-aurora-primary sm:text-xl line-clamp-2">
+          <h3 className="mt-2 font-display text-lg font-bold leading-snug tracking-tight text-aurora-text transition-colors group-hover:text-aurora-primary sm:text-xl line-clamp-2">
             {project.title}
           </h3>
           {project.description ? (
-            <p className="mt-2 text-sm leading-snug text-aurora-muted line-clamp-2">{project.description}</p>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-aurora-muted font-normal line-clamp-2">
+              {project.description}
+            </p>
           ) : null}
-          <span className="store-featured-project__cta mt-4 flex h-11 w-full items-center justify-center rounded-lg text-sm font-bold">
-            View bundle
+          <span className="store-featured-project__cta mt-4 flex h-11 w-full items-center justify-center rounded-lg text-sm font-bold tracking-wide">
+            Explore itinerary
           </span>
         </div>
       </Link>
@@ -97,10 +99,10 @@ function HomeTrustList({ storeName }: { storeName: string | undefined }) {
     "Carry-on friendly picks where marked on qualifying products",
   ];
   return (
-    <ul className="store-home-trust mt-6 space-y-2.5 border-t border-aurora-border/55 pt-6">
+    <ul className="store-home-trust mt-8 space-y-3 border-t border-aurora-border/50 pt-7">
       {items.map((t) => (
-        <li key={t} className="flex items-start gap-2.5 text-sm leading-snug text-aurora-text">
-          <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" strokeWidth={2.5} aria-hidden />
+        <li key={t} className="flex items-start gap-3 text-sm leading-relaxed text-stone-800 dark:text-aurora-text">
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-aurora-accent" strokeWidth={2.5} aria-hidden />
           <span>{t}</span>
         </li>
       ))}
@@ -189,14 +191,20 @@ function HeroImageLink({
         aria-label="Home"
       >
         {heroImageUrl ? (
-          <img
-            src={heroImageUrl}
-            alt=""
-            className={mergeTemplateLogoMask(
-              heroImageUrl,
-              "absolute inset-0 h-full w-full object-cover object-center"
-            )}
-          />
+          <>
+            <img
+              src={heroImageUrl}
+              alt=""
+              className={mergeTemplateLogoMask(
+                heroImageUrl,
+                "absolute inset-0 h-full w-full object-cover object-center"
+              )}
+            />
+            <span
+              className="travel-hero-cinematic-overlay pointer-events-none absolute inset-0 z-[1]"
+              aria-hidden
+            />
+          </>
         ) : (
           <span className="font-display relative z-[1] text-2xl sm:text-4xl font-bold text-aurora-text px-4 text-center">
             {siteName}
@@ -208,14 +216,20 @@ function HeroImageLink({
   return (
     <Link href={href} className={splitHeroLogoWellLinkClass(heroSize)} aria-label="Home">
       {heroImageUrl ? (
-        <img
-          src={heroImageUrl}
-          alt=""
-          className={mergeTemplateLogoMask(
-            heroImageUrl,
-            `w-auto max-w-full h-auto object-contain mx-auto drop-shadow-sm ${splitClampClass}`
-          )}
-        />
+        <>
+          <img
+            src={heroImageUrl}
+            alt=""
+            className={mergeTemplateLogoMask(
+              heroImageUrl,
+              `relative z-0 w-auto max-w-full h-auto object-contain mx-auto drop-shadow-sm ${splitClampClass}`
+            )}
+          />
+          <span
+            className="pointer-events-none absolute inset-0 z-[1] rounded-2xl bg-gradient-to-t from-stone-900/25 via-stone-900/5 to-amber-950/10"
+            aria-hidden
+          />
+        </>
       ) : (
         <span className={splitHeroFallbackTitleClass(heroSize)}>{siteName}</span>
       )}
@@ -274,26 +288,34 @@ export function CommandSurface({
           />
         </div>
       )}
-      <h1
-        className={`font-sans font-bold tracking-tight text-aurora-text mb-2 leading-tight ${
-          isFullComboHero
-            ? "text-2xl sm:text-3xl md:text-4xl"
-            : "travel-home-hero-headline text-xl sm:text-2xl md:text-3xl lg:text-[2rem]"
-        }`}
-      >
-        {isFullComboHero ? "Or something else?" : "Ready for an adventure?"}
-      </h1>
-      <p className="text-aurora-muted text-sm sm:text-base mb-5 font-medium leading-snug max-w-xl">
-        {isFullComboHero
-          ? "Let's get you there fast"
-          : verticalMissionSubtitle(verticalProfile)}
-      </p>
-
-      <div className="relative z-20 mb-5">
-        <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-aurora-muted mb-2.5">
-          Shop by trip
+      <div className={isFullComboHero ? undefined : "travel-home-hero-moment"}>
+        <h1
+          className={`font-bold text-aurora-text mb-2 leading-tight ${
+            isFullComboHero
+              ? "font-sans tracking-tight text-2xl sm:text-3xl md:text-4xl"
+              : "travel-home-hero-headline text-xl sm:text-2xl md:text-3xl lg:text-[2rem]"
+          }`}
+        >
+          {isFullComboHero ? "Or something else?" : "Ready for an adventure?"}
+        </h1>
+        <p
+          className={`text-stone-600 dark:text-aurora-muted mb-6 sm:mb-7 leading-relaxed max-w-xl ${
+            isFullComboHero
+              ? "text-sm sm:text-base font-medium"
+              : "travel-home-hero-subline text-[0.9375rem] sm:text-lg font-normal"
+          }`}
+        >
+          {isFullComboHero
+            ? "Let's get you there fast"
+            : verticalMissionSubtitle(verticalProfile)}
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 max-w-2xl">
+      </div>
+
+      <div className="relative z-20 mb-6">
+        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-stone-500 dark:text-aurora-muted mb-3">
+          Plan by trip
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 max-w-2xl">
           {quickActions.map((action) => {
             const Icon = action.icon;
             const href = action.href;
@@ -304,10 +326,10 @@ export function CommandSurface({
                 onClick={() => {
                   if (shouldLockRecipeMissionForMissionPill(action.label, href)) holmesMissionLockCombo();
                 }}
-                className="travel-home-task-chip inline-flex min-h-[2.75rem] flex-col items-center justify-center gap-1 rounded-lg border border-aurora-border bg-aurora-surface px-2 py-2.5 text-center text-xs font-semibold text-aurora-text transition-colors hover:border-aurora-primary sm:min-h-[3rem] sm:text-[0.8125rem]"
+                className="travel-home-task-chip relative z-10 inline-flex min-h-[2.75rem] flex-col items-center justify-center gap-1 rounded-lg border border-aurora-border px-2 py-2.5 text-center text-xs font-semibold text-aurora-text sm:min-h-[3rem] sm:text-[0.8125rem]"
               >
                 <Icon className="h-4 w-4 shrink-0 text-aurora-primary" aria-hidden />
-                <span className="leading-tight line-clamp-2">{action.label}</span>
+                <span className="leading-tight line-clamp-2 relative z-10">{action.label}</span>
               </Link>
             );
           })}
@@ -315,16 +337,16 @@ export function CommandSurface({
       </div>
 
       {!isFullComboHero && (
-        <div className="travel-home-popular mb-6">
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-aurora-muted mb-2">
-            Popular search
+        <div className="travel-home-popular mb-7">
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-stone-500 dark:text-aurora-muted mb-2.5">
+            Travelers often search
           </p>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
+          <div className="flex flex-wrap gap-x-5 gap-y-2.5">
             {POPULAR_LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-sm font-semibold text-aurora-primary hover:underline underline-offset-2"
+                className="travel-home-popular-link text-sm font-semibold text-aurora-primary underline-offset-4 decoration-aurora-primary/35 hover:decoration-aurora-primary/70 hover:underline"
               >
                 {l.label}
               </Link>
@@ -334,12 +356,12 @@ export function CommandSurface({
       )}
 
       <div className="relative z-10">
-        <p className="text-xs font-semibold text-aurora-muted uppercase tracking-widest mb-2">
-          Search the catalogue
+        <p className="text-[0.62rem] font-semibold text-stone-500 dark:text-aurora-muted uppercase tracking-[0.2em] mb-2.5">
+          Find anything for the journey
         </p>
         {store ? (
           <div
-            className="rounded-xl border border-aurora-border bg-aurora-surface shadow-sm focus-within:border-aurora-primary/60 focus-within:ring-1 focus-within:ring-aurora-primary/25 transition-all max-w-md overflow-visible relative z-30"
+            className="travel-command-search-shell rounded-xl border border-aurora-border bg-aurora-surface max-w-md overflow-visible relative z-30"
             data-command-search
           >
             <SearchDropdown
@@ -371,9 +393,9 @@ export function CommandSurface({
 
   if (heroLayout === "full_width") {
     return (
-      <section className="command-surface-hero bg-gradient-to-b from-aurora-surface to-aurora-bg">
+      <section className="command-surface-hero">
         <div
-          className={`relative w-full overflow-hidden bg-aurora-surface/80 border-b border-aurora-border ${fullWidthHeroBandClass(heroSize)}`}
+          className={`travel-hero-fullbleed-band relative w-full overflow-hidden bg-aurora-surface/80 border-b border-aurora-border/80 ${fullWidthHeroBandClass(heroSize)}`}
         >
           <HeroImageLink
             href="/"
@@ -396,9 +418,7 @@ export function CommandSurface({
   }
 
   return (
-    <section
-      className={`command-surface-hero px-4 sm:px-6 bg-gradient-to-b from-aurora-surface to-aurora-bg ${splitHeroSectionPaddingClass(heroSize)}`}
-    >
+    <section className={`command-surface-hero px-4 sm:px-6 ${splitHeroSectionPaddingClass(heroSize)}`}>
       <div
         className={`max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_minmax(280px,360px)] xl:grid-cols-[1fr_minmax(300px,400px)] items-start ${splitHeroRowGapClass(heroSize)}`}
       >
