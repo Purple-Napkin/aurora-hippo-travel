@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { holmesRecipe, holmesRecipeProducts } from "@aurora-studio/starter-core";
+import {
+  holmesRecipe,
+  holmesRecipeProducts,
+  isHolmesComboPending,
+  holmesComboPollUntilReady,
+} from "@aurora-studio/starter-core";
 import { holmesRecipeView } from "@aurora-studio/starter-core";
 import { HolmesTidbits } from "@aurora-studio/starter-core";
 import { AddToCartButton } from "@aurora-studio/starter-core";
@@ -31,6 +36,7 @@ interface RecipePageViewProps {
   currency?: string;
   embeddedTitle?: boolean;
   compact?: boolean;
+  recipeAwaitingGeneration?: boolean;
 }
 
 export function RecipePageView({
@@ -39,6 +45,7 @@ export function RecipePageView({
   currency = "GBP",
   embeddedTitle = false,
   compact = false,
+  recipeAwaitingGeneration = false,
 }: RecipePageViewProps) {
   const { addItem } = useCart();
   const { excludeDietary } = useDietaryExclusions();
@@ -66,35 +73,44 @@ export function RecipePageView({
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      holmesRecipe(recipeSlug),
-      holmesRecipeProducts(recipeSlug, compact ? 8 : 24, {
-        excludeDietary: excludeDietary.length ? excludeDietary : undefined,
-      }),
-      getStoreConfig(),
-    ])
-      .then(([rec, prodRes, config]) => {
+    setLoading(true);
+    setError(null);
+    (async () => {
+      try {
+        const [rec, prodRes, config] = await Promise.all([
+          holmesRecipe(recipeSlug),
+          holmesRecipeProducts(recipeSlug, compact ? 8 : 24, {
+            excludeDietary: excludeDietary.length ? excludeDietary : undefined,
+          }),
+          getStoreConfig(),
+        ]);
         if (cancelled) return;
-        if (rec) {
+        let resolved = rec;
+        if (resolved && isHolmesComboPending(resolved)) {
+          resolved = await holmesComboPollUntilReady(recipeSlug);
+        }
+        if (cancelled) return;
+        if (resolved && !isHolmesComboPending(resolved)) {
           setRecipe({
-            title: rec.title,
-            description: rec.description,
-            image_url: rec.image_url?.trim() ? rec.image_url.trim() : null,
-            ingredients: rec.ingredients ?? [],
-            instructions: rec.instructions,
-            origin_tidbit: rec.origin_tidbit,
+            title: resolved.title,
+            description: resolved.description,
+            image_url: resolved.image_url?.trim() ? resolved.image_url.trim() : null,
+            ingredients: resolved.ingredients ?? [],
+            instructions: resolved.instructions,
+            origin_tidbit: resolved.origin_tidbit,
           });
+        } else {
+          setRecipe(null);
         }
         setProducts(dedupeSearchHitsByRecordId((prodRes.products ?? []) as SearchHit[]));
         const slug = (config as { catalogTableSlug?: string })?.catalogTableSlug ?? null;
         setCatalogSlug(slug);
-      })
-      .catch((err) => {
+      } catch (err) {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load bundle");
-      })
-      .finally(() => {
+      } finally {
         if (!cancelled) setLoading(false);
-      });
+      }
+    })();
     return () => {
       cancelled = true;
     };
@@ -124,13 +140,17 @@ export function RecipePageView({
   const totalCents = displayProducts.reduce((s, p) => s + (hitPriceCents(p) ?? 0), 0);
 
   if (loading) {
+    const msg =
+      recipeAwaitingGeneration && !compact
+        ? "Personalising this bundle…"
+        : compact
+          ? "Loading bundle picks…"
+          : "Loading your bundle…";
     return (
       <div
         className={`w-full flex flex-col items-center justify-center text-aurora-muted ${compact ? "py-8" : "py-16"}`}
       >
-        <div className={`animate-pulse ${compact ? "text-base" : "text-lg"}`}>
-          {compact ? "Loading bundle picks…" : "Loading your bundle…"}
-        </div>
+        <div className={`animate-pulse ${compact ? "text-base" : "text-lg"}`}>{msg}</div>
       </div>
     );
   }
