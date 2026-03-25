@@ -357,7 +357,7 @@ export function CommandSurface({
 
       <div className="relative z-10">
         <p className="text-[0.62rem] font-semibold text-stone-500 dark:text-aurora-muted uppercase tracking-[0.2em] mb-2.5">
-          Find anything for the journey
+          Find what you need
         </p>
         {store ? (
           <div
@@ -371,6 +371,7 @@ export function CommandSurface({
               variant="embedded"
               excludeDietary={excludeForSearch}
               getRecipeSuggestion={getRecipeSuggestion}
+              getComboHref={(slug) => `/for-you/package/${encodeURIComponent(slug)}`}
             />
           </div>
         ) : (
@@ -405,7 +406,7 @@ export function CommandSurface({
             heroSize={heroSize}
           />
         </div>
-        <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-10 sm:py-12 lg:py-16">
+        <div className="relative z-50 max-w-6xl mx-auto w-full px-4 sm:px-6 py-10 sm:py-12 lg:py-16">
           <div className="max-w-2xl mx-auto lg:mx-0">{formContentInner}</div>
           {featuredProject ? (
             <div className="mt-10 max-w-md mx-auto lg:mx-0">
@@ -422,7 +423,7 @@ export function CommandSurface({
       <div
         className={`max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_minmax(280px,360px)] xl:grid-cols-[1fr_minmax(300px,400px)] items-start ${splitHeroRowGapClass(heroSize)}`}
       >
-        <div className="min-w-0 order-1 flex justify-center lg:justify-start w-full">
+        <div className="relative z-50 min-w-0 order-1 flex justify-center lg:justify-start w-full">
           <div className="w-full max-w-2xl lg:max-w-none">{formContentInner}</div>
         </div>
 
