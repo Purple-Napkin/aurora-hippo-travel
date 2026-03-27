@@ -111,6 +111,12 @@ Spec and acceptance criteria: [HOLMES-WHITEPAPER.md](../../aurora-studio/docs/HO
 
 ---
 
+## Cart combos (travel vs grocery)
+
+**Food “meal occasion” alignment** (breakfast vs dinner baskets, recipe title filtering) applies only to **grocery / ecom** Holmes combo domain. **Travel** tenants use **itinerary / trip** framing for bundles, not meal-occasion rules. See [holmes-cart-meal-occasion.md](../../aurora-studio/docs/holmes-cart-meal-occasion.md) (scope table).
+
+---
+
 ## Don't Lose Track
 
 The command surface, missions, and feed are **expression layers**. Holmes is the **brain**.
