@@ -29,15 +29,15 @@ export function ShoppingListTemplates() {
             <Link
               key={t.slug}
               href={href}
-              className="travel-destination-card flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-aurora-surface border border-aurora-border/80 shadow-sm font-medium text-aurora-text"
+              className="travel-destination-card flex w-full sm:w-auto max-w-full items-center gap-3 px-5 py-3.5 rounded-2xl bg-aurora-surface border border-aurora-border/80 shadow-sm font-medium text-aurora-text"
             >
               <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-aurora-primary/12 to-amber-500/10 text-aurora-primary ring-1 ring-aurora-primary/10">
                 <ListChecks className="w-5 h-5" />
               </span>
-              <div>
-                <span className="block">{t.label}</span>
+              <div className="min-w-0">
+                <span className="block break-words">{t.label}</span>
                 {t.description && (
-                  <span className="block text-xs text-aurora-muted font-normal mt-0.5">
+                  <span className="block break-words text-xs text-aurora-muted font-normal mt-0.5">
                     {t.description}
                   </span>
                 )}
