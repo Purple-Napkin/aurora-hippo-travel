@@ -243,7 +243,7 @@ export function ProductGridSection({
       </div>
       <div
         {...(withHolmesMarkers ? { "data-holmes-home-section-grid": true } : {})}
-        className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5"
+        className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-4 sm:gap-5"
       >
         {sec.products.map((prod) => (
           <ContentBlockProductCard
@@ -279,14 +279,14 @@ export function InspirationSection({
       ) : null}
       <div
         {...(withHolmesMarkers ? { "data-holmes-home-section-grid": true } : {})}
-        className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+        className="grid grid-cols-2 items-stretch sm:grid-cols-4 gap-4"
       >
         {sec.cards.map((card, j) => (
           <Link
             key={j}
             href={card.linkUrl || "/catalogue"}
             {...(withHolmesMarkers ? { "data-holmes-home-card": true } : {})}
-            className="block p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 hover:shadow-md transition-all"
+            className="flex h-full flex-col p-4 rounded-xl bg-aurora-surface border border-aurora-border hover:border-aurora-primary/40 hover:shadow-md transition-all"
           >
             <div className="aspect-square rounded-lg bg-aurora-surface-hover mb-2 overflow-hidden">
               <ProductImage
@@ -342,7 +342,7 @@ export function RecipeIdeasRail({
       </h2>
       {variant === "letter" ? (
         <p className="text-sm text-aurora-muted max-w-2xl mb-6 leading-relaxed">
-          Trip bundles and add-ons we think pair with your basket — short, personal, and easy to add
+          Trip bundles and add-ons we think pair with your basket: short, personal, and easy to add
           in one go.
         </p>
       ) : null}

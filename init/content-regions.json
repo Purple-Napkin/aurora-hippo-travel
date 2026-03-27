@@ -1,7 +1,7 @@
 {
   "$schema": "./content-regions.schema.json",
   "version": 1,
-  "generatedAt": "2026-03-27T09:09:49.299Z",
+  "generatedAt": "2026-03-27T10:45:06.265Z",
   "legacyAliases": {
     "hippo-grocery": "aurora-template-grocery",
     "hippo-hotels": "aurora-template-hotels",
